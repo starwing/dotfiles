@@ -1,0 +1,80 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+export ZPLUG_HOME=$HOME/.zplug
+source $ZPLUG_HOME/init.zsh
+
+zmodload zsh/zprof
+
+# zplug self manage
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
+# Prezto framework
+#zplug "sorin-ionescu/prezto", use:"init.zsh", 
+zplug "sorin-ionescu/prezto", use:"init.zsh", dir:"~/.zprezto"
+[ -e "$HOME/.zpreztorc" ] && source $HOME/.zpreztorc
+
+# Utils
+#zplug "b4b4r07/enhancd", use:init.sh
+#if zplug check "b4b4r07/enhancd"; then
+#    ENHANCD_FILTER="fzy:fzf:skim"
+#fi
+
+# themes
+#zplug "sindresorhus/pure", as:theme, use:"*.zsh"
+zplug "denysdovhan/spaceship-prompt", use:"spaceship.zsh", from:github, as:theme
+SPACESHIP_PROMPT_LANG_ORDER=(node rust) #elixir
+SPACESHIP_PROMPT_ORDER=(time user host dir git \
+    ${SPACESHIP_PROMPT_LANG_ORDER[@]} \
+    docker exec_time line_sep jobs exit_code char)
+
+# Check for uninstalled plugins.
+#if ! zplug check --verbose; then
+#  printf "Install? [y/N]: "
+#  if read -q; then
+#    echo; zplug install
+#  fi
+#fi
+zplug load
+
+# Customize to your needs...
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+#z.lua
+[ ! -z "`which lua`" ] && {
+    eval "$(lua ~/.vim/tools/z.lua --init zsh enhanced fzf)"
+    alias zc='z -c'      # restrict matches to subdirs of $PWD
+    alias zz='z -i'      # cd with interactive selection
+    alias zf='z -I'      # use fzf to select in multiple matches
+    alias zb='z -b'      # quickly cd to the parent directory
+    alias zh='z -I -t .'
+}
+
+alias ta="tmux attach"
+alias love="/Applications/love.app/Contents/MacOS/love"
+
+function fq() {
+    if [[ ! -v FQ ]]; then
+	#local proxy=socks5://127.0.0.1:1080
+	local proxy=http://127.0.0.1:1087
+	export all_proxy=$proxy
+	export http_proxy=$proxy
+	export https_proxy=$proxy
+	export FQ=true
+	echo "FQ setup"
+    else
+	unset all_proxy
+	unset http_proxy
+	unset https_proxy
+	unset FQ
+	echo "FQ off"
+    fi
+}
+
+[ -e "${HOME}/.iterm2_shell_integration.zsh" ] && source "${HOME}/.iterm2_shell_integration.zsh"
+

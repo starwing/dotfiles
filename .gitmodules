@@ -1,0 +1,21 @@
+[submodule "vim"]
+	path = vim
+	url = https://github.com/starwing/vimrc
+[submodule "prezto"]
+	path = zsh/prezto
+	url = https://github.com/sorin-ionescu/prezto
+[submodule "tmux/plugins/tpm"]
+	path = tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm
+[submodule "tmux/plugins/tpm-resurrect"]
+	path = tmux/plugins/tpm-resurrect
+	url = https://github.com/tmux-plugins/tmux-resurrect
+[submodule "tmux/plugins/tpm-sensible"]
+	path = tmux/plugins/tpm-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible
+[submodule "tmux/plugins/tpm-themepack"]
+	path = tmux/plugins/tpm-themepack
+	url = https://github.com/jimeh/tmux-themepack
+[submodule "zsh/zplug"]
+	path = zsh/zplug
+	url = https://github.com/zplug/zplug
