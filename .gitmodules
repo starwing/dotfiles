@@ -7,14 +7,14 @@
 [submodule "tmux/plugins/tpm"]
 	path = tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
-[submodule "tmux/plugins/tpm-resurrect"]
-	path = tmux/plugins/tpm-resurrect
+[submodule "tmux/plugins/tmux-resurrect"]
+	path = tmux/plugins/tmux-resurrect
 	url = https://github.com/tmux-plugins/tmux-resurrect
-[submodule "tmux/plugins/tpm-sensible"]
-	path = tmux/plugins/tpm-sensible
+[submodule "tmux/plugins/tmux-sensible"]
+	path = tmux/plugins/tmux-sensible
 	url = https://github.com/tmux-plugins/tmux-sensible
-[submodule "tmux/plugins/tpm-themepack"]
-	path = tmux/plugins/tpm-themepack
+[submodule "tmux/plugins/tmux-themepack"]
+	path = tmux/plugins/tmux-themepack
 	url = https://github.com/jimeh/tmux-themepack
 [submodule "zsh/zplug"]
 	path = zsh/zplug
