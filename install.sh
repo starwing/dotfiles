@@ -37,12 +37,12 @@ make_link() {
     ln -sf $SCRIPTPATH/$src $PREFIX/$dst
 }
 
-make_link tmux           .tmux
-make_link tmux/tmux.conf .tmux.conf
-make_link vim            .vim
-make_link vim/_vimrc     .vimrc
-make_link zsh/zplug      .zplug
-make_link zsh/prezto     .zprezto
+make_link tmux                     .tmux
+make_link tmux/tmux.conf           .tmux.conf
+make_link vim                      .vim
+make_link vim/_vimrc               .vimrc
+make_link zsh/zplug/zplug          .zplug
+make_link zsh/sorin-ionescu/prezto .zprezto
 
 for f in $(cd $SCRIPTPATH; ls zsh/prezto-runcoms/*); do
     make_link $f ".$(basename $f)"

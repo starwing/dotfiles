@@ -16,6 +16,12 @@
 [submodule "tmux/plugins/tmux-themepack"]
 	path = tmux/plugins/tmux-themepack
 	url = https://github.com/jimeh/tmux-themepack
-[submodule "zsh/zplug"]
-	path = zsh/zplug
+[submodule "zsh/zplug/zplug"]
+	path = zsh/zplug/zplug
 	url = https://github.com/zplug/zplug
+[submodule "zsh/sorin-ionescu/prezto"]
+	path = zsh/sorin-ionescu/prezto
+	url = https://github.com/sorin-ionescu/prezto
+[submodule "zsh/denysdovhan/spaceship-prompt"]
+	path = zsh/denysdovhan/spaceship-prompt
+	url = https://github.com/denysdovhan/spaceship-prompt
