@@ -5,34 +5,53 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
+zmodload zsh/zprof
+
+# zplug {{{1
 export ZPLUG_HOME=$HOME/.zplug
 source $ZPLUG_HOME/init.zsh
 
-zmodload zsh/zprof
+# zplug self manage {{{2
+zplug 'zplug/zplug', hook-build:'zplug --self-manage', dir: "~/.zplug"
 
-# zplug self manage
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-
-# Prezto framework
+# Prezto framework {{{2
 #zplug "sorin-ionescu/prezto", use:"init.zsh", 
 zplug "sorin-ionescu/prezto", use:"init.zsh", dir:"~/.zprezto"
+
+# settings
 [ -e "$HOME/.zpreztorc" ] && source $HOME/.zpreztorc
 
-# Utils
+# enhancd {{{2
+
 #zplug "b4b4r07/enhancd", use:init.sh
-#if zplug check "b4b4r07/enhancd"; then
-#    ENHANCD_FILTER="fzy:fzf:skim"
-#fi
+#ENHANCD_FILTER="fzy:fzf:skim"
 
-# themes
+# themes {{{2
+
 #zplug "sindresorhus/pure", as:theme, use:"*.zsh"
-zplug "denysdovhan/spaceship-prompt", use:"spaceship.zsh", from:github, as:theme
-SPACESHIP_PROMPT_LANG_ORDER=(node rust) #elixir
-SPACESHIP_PROMPT_ORDER=(time user host dir git \
-    ${SPACESHIP_PROMPT_LANG_ORDER[@]} \
-    docker exec_time line_sep jobs exit_code char)
 
-# Check for uninstalled plugins.
+# spaceship {{{3
+
+zplug "denysdovhan/spaceship-prompt", \
+  use:"spaceship.zsh", from:github, as:theme
+
+# settings
+SPACESHIP_PROMPT_ORDER=(user host dir git \
+  node rust docker exec_time line_sep \
+  jobs exit_code char)
+SPACESHIP_RPROMPT_ORDER=(time)
+SPACESHIP_TIME_SHOW=true
+SPACESHIP_CHAR_SYMBOL='$ '
+SPACESHIP_CHAR_SYMBOL_ROOT='# '
+SPACESHIP_USER_SHOW=always
+SPACESHIP_HOST_SHOW=always
+SPACESHIP_HOST_PREFIX='@ '
+SPACESHIP_DIR_PREFIX='in ['
+SPACESHIP_DIR_SUFFIX='] '
+
+# }}}3
+# ------------------------------------------------------------
+# Check for uninstalled plugins. {{{2
 #if ! zplug check --verbose; then
 #  printf "Install? [y/N]: "
 #  if read -q; then
@@ -41,11 +60,14 @@ SPACESHIP_PROMPT_ORDER=(time user host dir git \
 #fi
 zplug load
 
-# Customize to your needs...
+# }}}2
+# ------------------------------------------------------------
+# fzf {{{1
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-#z.lua
+# z.lua {{{1
+
 [ ! -z "`which lua`" ] && {
     eval "$(lua ~/.vim/tools/z.lua --init zsh enhanced fzf)"
     alias zc='z -c'      # restrict matches to subdirs of $PWD
@@ -55,8 +77,11 @@ zplug load
     alias zh='z -I -t .'
 }
 
-alias ta="tmux attach"
-alias love="/Applications/love.app/Contents/MacOS/love"
+# iterm2 {{{1
+
+[ -e "${HOME}/.iterm2_shell_integration.zsh" ] && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# break the wall {{{1
 
 function fq() {
     if [[ ! -v FQ ]]; then
@@ -76,5 +101,12 @@ function fq() {
     fi
 }
 
-[ -e "${HOME}/.iterm2_shell_integration.zsh" ] && source "${HOME}/.iterm2_shell_integration.zsh"
+# alias {{{1
+
+alias ta="tmux attach"
+alias love="/Applications/love.app/Contents/MacOS/love"
+
+# }}}1
+
+# vim: nu et sw=2 ft=zsh sts=2 ts=8 fdm=marker fdc=2
 
