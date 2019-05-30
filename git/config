@@ -1,3 +1,13 @@
 [user]
 	email = weasley.wx@gmail.com
 	name = Xavier Wang
+[core]
+	excludesfile = /Users/lilithgames/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[commit]
+	template = /Users/lilithgames/.stCommitMsg

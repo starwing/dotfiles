@@ -38,6 +38,8 @@ make_link() {
 }
 
 make_link git/config               .gitconfig
+make_link git/ignore               .gitignore_global
+make_link git/commit_msg           .stCommitMsg
 make_link tmux                     .tmux
 make_link tmux/tmux.conf           .tmux.conf
 make_link vim                      .vim
