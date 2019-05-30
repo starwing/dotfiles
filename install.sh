@@ -37,6 +37,7 @@ make_link() {
     ln -sf $SCRIPTPATH/$src $PREFIX/$dst
 }
 
+make_link git/config               .gitconfig
 make_link tmux                     .tmux
 make_link tmux/tmux.conf           .tmux.conf
 make_link vim                      .vim
