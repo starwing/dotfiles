@@ -29,17 +29,48 @@ zplug "sorin-ionescu/prezto", use:"init.zsh"
 
 # themes {{{2
 
-#zplug "sindresorhus/pure", as:theme, use:"*.zsh"
+zstyle ':dotfiles:prompt' theme simple
+
+# simple {{{3
+
+if zstyle -t ':dotfiles:prompt' theme simple; then
+
+NL=$'\n'
+if [[ -n $SSH_CONNECTION ]]; then
+  host_color=green
+else
+  host_color=blue
+fi
+if [ "$UID" -eq 0 ]; then
+  user_color=red
+else
+  user_color=yellow
+fi
+setopt PROMPT_SUBST
+export RPROMPT="%B[%F{yellow}%D{%T}%f]%b"
+export PROMPT="$NL%B%F{$user_color}%n%f%b @ %B%F{$host_color}%m%f%b"
+PROMPT+=" %Bin%b %{%B[%F{cyan}\$(collapsed_pwd)%f]%b%}$NL"
+PROMPT+="%B%(1j.%F{blue}✦ %f.)%b"
+PROMPT+="%B%(?.%F{green}.%F{red}[%?] )%(!.%#.\$)%f%b "
+
+fi
+
+# pure {{{3
+
+if zstyle -t ':dotfiles:prompt' theme pure; then
+  zplug "sindresorhus/pure", as:theme, use:"*.zsh"
+fi
 
 # spaceship {{{3
 
+if zstyle -t ':dotfiles:prompt' theme spaceship; then
 zplug "denysdovhan/spaceship-prompt", \
   use:"spaceship.zsh", from:github, as:theme
 
 # settings
-SPACESHIP_PROMPT_ORDER=(user host dir git \
-  node rust docker exec_time line_sep \
-  jobs exit_code char)
+SPACESHIP_PROMPT_ORDER=(user host dir \
+  git node rust docker exec_time \
+  line_sep jobs exit_code char)
 SPACESHIP_RPROMPT_ORDER=(time)
 SPACESHIP_TIME_SHOW=true
 SPACESHIP_CHAR_SYMBOL='$ '
@@ -49,6 +80,7 @@ SPACESHIP_HOST_SHOW=always
 SPACESHIP_HOST_PREFIX='@ '
 SPACESHIP_DIR_PREFIX='in ['
 SPACESHIP_DIR_SUFFIX='] '
+fi
 
 # }}}3
 # ------------------------------------------------------------
@@ -102,6 +134,83 @@ function fq() {
 	unset FQ
 	echo "FQ off"
     fi
+}
+
+# bookmark {{{1
+
+function m() {
+  local MARKPATH="${MARKPATH:-$HOME/.local/share/marks}"
+  [ -d "$MARKPATH" ] || mkdir -p -m 700 "$MARKPATH" 2> /dev/null
+  case "$1" in
+    +*)            # m +foo  - add new bookmark for $PWD
+      ln -snf "$(pwd)" "$MARKPATH/${1:1}" 
+      ;;
+    -*)            # m -foo  - delete a bookmark named "foo"
+      rm -i "$MARKPATH/${1:1}" 
+      ;;
+    /*)            # m /bar  - search bookmarks matching "bar"
+      find "$MARKPATH" -type l -name "*${1:1}*" | \
+        awk -F "/" '{print $NF}' | MARKPATH="$MARKPATH" xargs -I'{}'\
+        sh -c 'echo "{} ->" $(readlink "$MARKPATH/{}")'
+      ;;
+    "")            # m       - list all bookmarks
+      command ls -1 "$MARKPATH/" | MARKPATH="$MARKPATH" xargs -I'{}' \
+        sh -c 'echo "{} ->" $(readlink "$MARKPATH/{}")'
+      ;;
+    *)             # m foo   - cd to the bookmark directory
+      local dest="$(readlink "$MARKPATH/$1" 2> /dev/null)"
+      [ -d "$dest" ] && cd "$dest" || echo "No such mark: $1"
+      ;;
+  esac
+}
+
+function _cdmark_complete() {
+  local MARKPATH="${MARKPATH:-$HOME/.local/share/marks}"
+  if [[ "${1}${2}" == "-"* ]]; then
+    reply=($(command ls -1 "$MARKPATH" 2> /dev/null | \
+      awk '{print "-"$0}'))
+  else
+    reply=($(command ls -1 "$MARKPATH" 2> /dev/null))
+  fi
+}
+
+compctl -K _cdmark_complete m
+
+
+# collapsed_pwd {{{1
+
+function collapsed_pwd() {
+    local pwd="$1"
+    local home="$HOME"
+    local size=${#home}
+    [[ $# == 0 ]] && pwd="$PWD"
+    [[ -z "$pwd" ]] && return
+    if [[ "$pwd" == "/" ]]; then
+        echo "/"
+        return
+    elif [[ "$pwd" == "$home" ]]; then
+        echo "~"
+        return
+    fi
+    [[ "$pwd" == "$home/"* ]] && pwd="~${pwd:$size}"
+    if [[ -n "$BASH_VERSION" ]]; then
+        local IFS="/"
+        local elements=($pwd)
+        local length=${#elements[@]}
+        for ((i=0;i<length-1;i++)); do
+            local elem=${elements[$i]}
+            [[ ${#elem} -gt 1 ]] && elements[$i]=${elem:0:1}
+        done
+    else
+        local elements=("${(s:/:)pwd}")
+        local length=${#elements}
+        for i in {1..$((length-1))}; do
+            local elem=${elements[$i]}
+            [[ ${#elem} > 1 ]] && elements[$i]=${elem[1]}
+        done
+    fi
+    local IFS="/"
+    echo "${elements[*]}"
 }
 
 # alias {{{1
