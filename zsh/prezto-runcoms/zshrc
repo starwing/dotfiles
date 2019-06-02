@@ -96,6 +96,11 @@ zplug load
 
 # }}}2
 # ------------------------------------------------------------
+# asdf {{{1
+
+[ -e "$HOME/.asdf/completions/asdf.bash" ] &&
+  source $HOME/.asdf/completions/asdf.bash
+
 # fzf {{{1
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -106,6 +111,7 @@ export FZF_DEFAULT_OPTS="--height=30% --layout=reverse --inline-info"
 
 [ ! -z "`which lua 2>/dev/null`" ] && {
     eval "$(lua ~/.vim/tools/z.lua --init zsh enhanced fzf)"
+    alias j="z"
     alias zc='z -c'      # restrict matches to subdirs of $PWD
     alias zz='z -i'      # cd with interactive selection
     alias zf='z -I'      # use fzf to select in multiple matches
@@ -218,6 +224,8 @@ function collapsed_pwd() {
 
 alias ta="tmux attach"
 alias love="/Applications/love.app/Contents/MacOS/love"
+alias cafe="caffeinate -is"
+alias blt="bl t"
 
 # }}}1
 
