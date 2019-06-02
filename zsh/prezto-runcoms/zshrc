@@ -47,7 +47,8 @@ else
   user_color=yellow
 fi
 setopt PROMPT_SUBST
-export RPROMPT="%B[%F{yellow}%D{%T}%f]%b"
+export PS2="%F{yellow}%(!.%#.\$) "
+export RPS1="%B[%F{yellow}%D{%T}%f]%b"
 export PROMPT="$NL%B%F{$user_color}%n%f%b @ %B%F{$host_color}%m%f%b"
 PROMPT+=" %Bin%b %{%B[%F{cyan}\$(collapsed_pwd)%f]%b%}$NL"
 PROMPT+="%B%(1j.%F{blue}✦ %f.)%b"
