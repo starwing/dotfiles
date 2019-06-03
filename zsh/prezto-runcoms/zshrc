@@ -47,12 +47,12 @@ else
   user_color=yellow
 fi
 setopt PROMPT_SUBST
-export PS2="%F{yellow}%(!.%#.\$) "
-export RPS1="%B%(?..%F{red}[%?]%f )[%F{yellow}%D{%T}%f]%b"
-export PROMPT="$NL%B%F{$user_color}%n%f%b @ %B%F{$host_color}%m%f%b"
-PROMPT+=" %Bin%b %{%B[%F{cyan}\$(collapsed_pwd)%f]%b%}$NL"
+export PS2="%F{yellow}%(!.%#.\\\$) "
+export RPS1="%B%(?..%F{red}[%?]%f)[%F{yellow}%D{%T}%f]%b"
+export PROMPT="$NL%B%F{$user_color}%n%f @ %F{$host_color}%m%f%b"
+PROMPT+=" %B%{in [%F{cyan}\$(collapsed_pwd)%f]%b%}$NL"
 PROMPT+="%B%(1j.%F{blue}✦ %f.)%b"
-PROMPT+="%B%(?.%F{green}.%F{red})%(!.%#.\$)%f%b "
+PROMPT+="%B%(?.%F{green}.%F{red})%(!.%#.\\\$)%f%b "
 
 fi
 
