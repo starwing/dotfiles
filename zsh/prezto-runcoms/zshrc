@@ -27,6 +27,12 @@ zplug "sorin-ionescu/prezto", use:"init.zsh"
 #zplug "b4b4r07/enhancd", use:init.sh
 #ENHANCD_FILTER="fzy:fzf:skim"
 
+# z.lua & fz {{{2
+
+FZ_HISTORY_CD_CMD="_zlua"
+zplug "changyuheng/fz", defer:1
+zplug "skywind3000/z.lua"
+
 # themes {{{2
 
 zstyle ':dotfiles:prompt' theme simple
@@ -104,18 +110,6 @@ zplug load
 # fzf {{{1
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# z.lua {{{1
-
-[ ! -z "`which lua 2>/dev/null`" ] && {
-    eval "$(lua ~/.vim/tools/z.lua --init zsh enhanced fzf)"
-    alias j="z"
-    alias zc='z -c'      # restrict matches to subdirs of $PWD
-    alias zz='z -i'      # cd with interactive selection
-    alias zf='z -I'      # use fzf to select in multiple matches
-    alias zb='z -b'      # quickly cd to the parent directory
-    alias zh='z -I -t .'
-}
 
 # iterm2 {{{1
 
@@ -225,6 +219,20 @@ function collapsed_pwd() {
     local IFS="/"
     echo "${elements[*]}"
 }
+
+# update submodule {{{1
+
+function update_submodule() {
+  find . -name config |\
+    grep git/config |\
+    grep -v ProjectToExclude |\
+    grep -v AnotherProjectToExclude |\
+    xargs -n 1 -I % sh -c '\
+    cat % | grep -m 1 url | sed "s/url = //g"; \
+    echo % | sed "s/.git\/config//g";' |\
+    xargs -n 2 echo git submodule add
+}
+
 
 # alias {{{1
 

@@ -26,3 +26,9 @@
 [submodule "zsh/denysdovhan/spaceship-prompt"]
 	path = zsh/denysdovhan/spaceship-prompt
 	url = https://github.com/denysdovhan/spaceship-prompt
+[submodule "zsh/skywind3000/z.lua"]
+	path = zsh/skywind3000/z.lua
+	url = https://github.com/skywind3000/z.lua.git
+[submodule "zsh/changyuheng/fz"]
+	path = zsh/changyuheng/fz
+	url = https://github.com/changyuheng/fz.git
