@@ -1,6 +1,7 @@
 [submodule "vim"]
 	path = vim
 	url = https://github.com/starwing/vimrc
+	ignore = dirty
 [submodule "prezto"]
 	path = zsh/prezto
 	url = https://github.com/sorin-ionescu/prezto
