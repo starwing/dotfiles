@@ -10,6 +10,6 @@
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [commit]
-	template = /Users/lilithgames/.stCommitMsg
+	template = $HOME/.stCommitMsg
 [push]
 	default = simple
