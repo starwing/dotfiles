@@ -43,5 +43,8 @@ export FZF_DEFAULT_OPTS="--height=30% --layout=reverse --inline-info"
 export GIT_EDITOR=vim
 export ERL_AFLAGS="-kernel shell_history enabled"
 
+export HEX_MIRROR="https://hexpm.upyun.com"
+export HEX_CDN="https://hexpm.upyun.com"
+
 [ -e "$HOME/.asdf/asdf.sh" ] && source $HOME/.asdf/asdf.sh
 

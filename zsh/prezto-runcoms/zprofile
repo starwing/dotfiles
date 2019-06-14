@@ -46,15 +46,27 @@ typeset -gU cdpath fpath mailpath path
 # )
 
 # Set the list of directories that Zsh searches for programs.
-path=(
+_altpath=(
   $HOME/.dotfiles/{bin,sbin}
   $HOME/.ssh/usm
   $HOME/.cargo/bin
   $HOME/Work/Local/bin
   $HOME/bin
+  /usr/local/opt/erlang@20/bin
   /usr/local/opt/openresty/nginx/sbin
   /usr/local/opt/erlang@20/bin
+  /opt/elixir/bin
+  /opt/erl/bin
   /usr/local/{bin,sbin}
+)
+altpath=()
+
+for p in ${_altpath[@]}; do
+    [ -d "$p" ] && altpath=($altpath $p)
+done
+
+path=(
+  $altpath
   $path
 )
 

@@ -32,6 +32,7 @@ zplug "sorin-ionescu/prezto", use:"init.zsh"
 FZ_HISTORY_CD_CMD="_zlua"
 zplug "changyuheng/fz", defer:1
 zplug "skywind3000/z.lua"
+alias j='z'
 
 # themes {{{2
 
