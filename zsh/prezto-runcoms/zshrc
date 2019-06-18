@@ -231,7 +231,7 @@ function update_submodule() {
     xargs -n 1 -I % sh -c '\
     cat % | grep -m 1 url | sed "s/url = //g"; \
     echo % | sed "s/.git\/config//g";' |\
-    xargs -n 2 echo git submodule add
+    xargs -n 2 echo git submodule add -f
 }
 
 
