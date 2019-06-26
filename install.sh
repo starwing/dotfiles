@@ -39,16 +39,16 @@ make_link() {
 
 mkdir $HOME/.cargo
 
-make_link git/config               $HOME/.gitconfig
-make_link git/ignore               $HOME/.gitignore_global
-make_link git/commit_msg           $HOME/.stCommitMsg
-make_link cargo/config             $HOME/.cargo/config
-make_link tmux                     $HOME/.tmux
-make_link tmux/tmux.conf           $HOME/.tmux.conf
-make_link vim                      $HOME/.vim
-make_link vim/_vimrc               $HOME/.vimrc
-make_link zsh/zplug/zplug          $HOME/.zplug
-make_link zsh/sorin-ionescu/prezto $HOME/.zprezto
+make_link git/config               .gitconfig
+make_link git/ignore               .gitignore_global
+make_link git/commit_msg           .stCommitMsg
+make_link cargo/config             .cargo/config
+make_link tmux                     .tmux
+make_link tmux/tmux.conf           .tmux.conf
+make_link vim                      .vim
+make_link vim/_vimrc               .vimrc
+make_link zsh/zplug/zplug          .zplug
+make_link zsh/sorin-ionescu/prezto .zprezto
 
 for f in $(cd $SCRIPTPATH; ls zsh/prezto-runcoms/*); do
     make_link $f ".$(basename $f)"
