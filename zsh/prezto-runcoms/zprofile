@@ -54,7 +54,6 @@ _altpath=(
   $HOME/bin
   /usr/local/opt/erlang@20/bin
   /usr/local/opt/openresty/nginx/sbin
-  /usr/local/opt/erlang@20/bin
   /opt/elixir/bin
   /opt/erl/bin
   /usr/local/{bin,sbin}
