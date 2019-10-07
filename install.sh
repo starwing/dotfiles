@@ -4,7 +4,7 @@ SCRIPT=$(perl -MCwd -e 'print Cwd::abs_path shift' "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
 PREFIX=$HOME
-UNINSTALL=$SCRIPTPATH/uninstall.sh
+UNINSTALL=$HOME/.uninstall_dotfiles.sh
 UNINSTALL_CMDS=""
 
 prepend() {

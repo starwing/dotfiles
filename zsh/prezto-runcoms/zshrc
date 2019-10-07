@@ -9,9 +9,12 @@ export DOTFILES=$HOME/.dotfiles
 zmodload zsh/zprof
 
 # zplug {{{1
-export ZPLUG_HOME=$HOME/.zplug
+export ZPLUG_ROOT=$HOME/.zplug
+export ZPLUG_HOME=$HOME/.zplug.user
 export ZPLUG_REPOS=$DOTFILES/zsh
-source $ZPLUG_HOME/init.zsh
+export ZPLUG_BIN=$ZPLUG_ROOT/bin
+export ZPLUG_LOADFILE=$ZPLUG_ROOT/packages.zsh
+source $ZPLUG_ROOT/init.zsh
 
 # zplug self manage {{{2
 zplug 'zplug/zplug'
