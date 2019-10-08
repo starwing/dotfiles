@@ -244,6 +244,7 @@ alias ta="tmux attach"
 alias love="/Applications/love.app/Contents/MacOS/love"
 alias cafe="caffeinate -is"
 alias blt="bl t"
+alias socks5="http_proxy=socks5://127.0.0.1:1080 https_proxy=socks5://127.0.0.1:1080 all_proxy=socks5://127.0.0.1:1080 "
 
 # }}}1
 
