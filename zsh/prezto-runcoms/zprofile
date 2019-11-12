@@ -26,7 +26,7 @@ export PAGER='less'
 #
 
 if [[ -z "$LANG" ]]; then
-    if [ "$TERM" == "xterm*" ]; then
+    if [[ "$TERM" == "xterm*" ]]; then
 	export LANG='zh_CN.UTF-8'
     else
 	export LANG='en_US.UTF-8'
@@ -52,7 +52,7 @@ _altpath=(
   $HOME/.cargo/bin
   $HOME/Work/Local/bin
   $HOME/bin
-  /usr/local/opt/erlang@20/bin
+  #/usr/local/opt/erlang@20/bin
   /usr/local/opt/openresty/nginx/sbin
   /opt/elixir/bin
   /opt/erl/bin
@@ -83,3 +83,6 @@ export LESS='-F -g -i -M -R -S -w -X -z-4'
 if (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
+
+[ -e "$HOME/.zprofile.user" ] && source "$HOME/.zprofile.user"
+

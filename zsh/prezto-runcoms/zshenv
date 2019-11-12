@@ -46,7 +46,7 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 export HEX_MIRROR="https://hexpm.upyun.com"
 export HEX_CDN="https://hexpm.upyun.com"
 
-[ -e "$HOME/.asdf/asdf.sh" ] && source $HOME/.asdf/asdf.sh
+#[ -e "$HOME/.asdf/asdf.sh" ] && source $HOME/.asdf/asdf.sh
 [ -e "$HOME/.zshenv.user" ] && source $HOME/.zshenv.user
 
 export HOMEBREW_NO_AUTO_UPDATE=1
