@@ -2,9 +2,6 @@
 	path = vim
 	url = https://github.com/starwing/vimrc
 	ignore = dirty
-[submodule "prezto"]
-	path = zsh/prezto
-	url = https://github.com/sorin-ionescu/prezto
 [submodule "tmux/plugins/tpm"]
 	path = tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
@@ -17,18 +14,51 @@
 [submodule "tmux/plugins/tmux-themepack"]
 	path = tmux/plugins/tmux-themepack
 	url = https://github.com/jimeh/tmux-themepack
-[submodule "zsh/zplug/zplug"]
-	path = zsh/zplug/zplug
-	url = https://github.com/zplug/zplug
-[submodule "zsh/sorin-ionescu/prezto"]
-	path = zsh/sorin-ionescu/prezto
-	url = https://github.com/sorin-ionescu/prezto
+[submodule "zsh/b4b4r07/zsh-vimode-visual"]
+	path = zsh/b4b4r07/zsh-vimode-visual
+	url = https://github.com/b4b4r07/zsh-vimode-visual
+[submodule "zsh/changyuheng/fz"]
+	path = zsh/changyuheng/fz
+	url = https://github.com/changyuheng/fz
 [submodule "zsh/denysdovhan/spaceship-prompt"]
 	path = zsh/denysdovhan/spaceship-prompt
 	url = https://github.com/denysdovhan/spaceship-prompt
+[submodule "zsh/junegunn/fzf"]
+	path = zsh/junegunn/fzf
+	url = https://github.com/junegunn/fzf
+[submodule "zsh/prezto-runcoms/zlogin"]
+	path = zsh/prezto-runcoms/zlogin
+	url = https://github.com/prezto-runcoms/zlogin
+[submodule "zsh/prezto-runcoms/zlogout"]
+	path = zsh/prezto-runcoms/zlogout
+	url = https://github.com/prezto-runcoms/zlogout
+[submodule "zsh/prezto-runcoms/zpreztorc"]
+	path = zsh/prezto-runcoms/zpreztorc
+	url = https://github.com/prezto-runcoms/zpreztorc
+[submodule "zsh/prezto-runcoms/zprofile"]
+	path = zsh/prezto-runcoms/zprofile
+	url = https://github.com/prezto-runcoms/zprofile
+[submodule "zsh/prezto-runcoms/zshenv"]
+	path = zsh/prezto-runcoms/zshenv
+	url = https://github.com/prezto-runcoms/zshenv
+[submodule "zsh/prezto-runcoms/zshrc"]
+	path = zsh/prezto-runcoms/zshrc
+	url = https://github.com/prezto-runcoms/zshrc
 [submodule "zsh/skywind3000/z.lua"]
 	path = zsh/skywind3000/z.lua
-	url = https://github.com/skywind3000/z.lua.git
-[submodule "zsh/changyuheng/fz"]
-	path = zsh/changyuheng/fz
-	url = https://github.com/changyuheng/fz.git
+	url = https://github.com/skywind3000/z.lua
+[submodule "zsh/sorin-ionescu/prezto"]
+	path = zsh/sorin-ionescu/prezto
+	url = https://github.com/sorin-ionescu/prezto
+[submodule "zsh/zplug/zplug"]
+	path = zsh/zplug/zplug
+	url = https://github.com/zplug/zplug
+[submodule "zsh/zsh-users/zsh-autosuggestions"]
+	path = zsh/zsh-users/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "zsh/zsh-users/zsh-history-substring-search"]
+	path = zsh/zsh-users/zsh-history-substring-search
+	url = https://github.com/zsh-users/zsh-history-substring-search
+[submodule "zsh/zsh-users/zsh-syntax-highlighting"]
+	path = zsh/zsh-users/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting

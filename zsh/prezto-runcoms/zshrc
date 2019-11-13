@@ -16,25 +16,26 @@ export ZPLUG_BIN=$ZPLUG_ROOT/bin
 export ZPLUG_LOADFILE=$ZPLUG_ROOT/packages.zsh
 source $ZPLUG_ROOT/init.zsh
 
-# zplug self manage {{{2
+# zplug packages {{{2
+
 zplug 'zplug/zplug'
-
-# Prezto framework {{{2
+zplug "b4b4r07/zsh-vimode-visual", defer:3
+zplug "changyuheng/fz", defer:1
+zplug "junegunn/fzf"
+zplug "skywind3000/z.lua"
 zplug "sorin-ionescu/prezto", use:"init.zsh"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-history-substring-search"
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
-# settings
+
+# prezto {{{2
+
 [ -e "$HOME/.zpreztorc" ] && source $HOME/.zpreztorc
-
-# enhancd {{{2
-
-#zplug "b4b4r07/enhancd", use:init.sh
-#ENHANCD_FILTER="fzy:fzf:skim"
 
 # z.lua & fz {{{2
 
 FZ_HISTORY_CD_CMD="_zlua"
-zplug "changyuheng/fz", defer:1
-zplug "skywind3000/z.lua"
 alias j='z'
 
 # themes {{{2
@@ -110,10 +111,6 @@ zplug load
 
 [ -e "$HOME/.asdf/completions/asdf.bash" ] &&
   source $HOME/.asdf/completions/asdf.bash
-
-# fzf {{{1
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # iterm2 {{{1
 
@@ -243,7 +240,6 @@ function update_submodule() {
 alias ta="tmux attach"
 alias love="/Applications/love.app/Contents/MacOS/love"
 alias cafe="caffeinate -is"
-alias blt="bl t"
 alias socks5="http_proxy=socks5://127.0.0.1:1080 https_proxy=socks5://127.0.0.1:1080 all_proxy=socks5://127.0.0.1:1080 "
 
 # }}}1
