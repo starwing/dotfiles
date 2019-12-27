@@ -26,24 +26,6 @@
 [submodule "zsh/junegunn/fzf"]
 	path = zsh/junegunn/fzf
 	url = https://github.com/junegunn/fzf
-[submodule "zsh/prezto-runcoms/zlogin"]
-	path = zsh/prezto-runcoms/zlogin
-	url = https://github.com/prezto-runcoms/zlogin
-[submodule "zsh/prezto-runcoms/zlogout"]
-	path = zsh/prezto-runcoms/zlogout
-	url = https://github.com/prezto-runcoms/zlogout
-[submodule "zsh/prezto-runcoms/zpreztorc"]
-	path = zsh/prezto-runcoms/zpreztorc
-	url = https://github.com/prezto-runcoms/zpreztorc
-[submodule "zsh/prezto-runcoms/zprofile"]
-	path = zsh/prezto-runcoms/zprofile
-	url = https://github.com/prezto-runcoms/zprofile
-[submodule "zsh/prezto-runcoms/zshenv"]
-	path = zsh/prezto-runcoms/zshenv
-	url = https://github.com/prezto-runcoms/zshenv
-[submodule "zsh/prezto-runcoms/zshrc"]
-	path = zsh/prezto-runcoms/zshrc
-	url = https://github.com/prezto-runcoms/zshrc
 [submodule "zsh/skywind3000/z.lua"]
 	path = zsh/skywind3000/z.lua
 	url = https://github.com/skywind3000/z.lua
