@@ -1,12 +1,5 @@
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-
 export DOTFILES=$HOME/.dotfiles
-zmodload zsh/zprof
+#zmodload zsh/zprof
 
 # zplug {{{1
 export ZPLUG_ROOT=$HOME/.zplug
