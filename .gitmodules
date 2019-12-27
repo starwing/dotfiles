@@ -20,9 +20,6 @@
 [submodule "zsh/changyuheng/fz"]
 	path = zsh/changyuheng/fz
 	url = https://github.com/changyuheng/fz
-[submodule "zsh/denysdovhan/spaceship-prompt"]
-	path = zsh/denysdovhan/spaceship-prompt
-	url = https://github.com/denysdovhan/spaceship-prompt
 [submodule "zsh/junegunn/fzf"]
 	path = zsh/junegunn/fzf
 	url = https://github.com/junegunn/fzf
