@@ -3,8 +3,8 @@
 SCRIPT=$(perl -MCwd -e 'print Cwd::abs_path shift' "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
-PREFIX=$HOME
-UNINSTALL=$HOME/.uninstall_dotfiles.sh
+PREFIX=$HOME/
+UNINSTALL=$PREFIX.uninstall_dotfiles.sh
 UNINSTALL_CMDS=""
 
 prepend() {
@@ -26,18 +26,22 @@ make_link() {
     local src=$1
     local dst=$2
     local bak
-    if [ -e "$PREFIX/$dst" -a ! -L "$PREFIX/$dst" ]; then
-	bak=$(find_backname $PREFIX/$dst)
-	echo Backup $PREFIX/$dst to $bak ...
-	prepend "mv $bak $PREFIX/$dst"
-	mv $PREFIX/$dst $bak
+    if [ -e "$PREFIX$dst" -a ! -L "$PREFIX$dst" ]; then
+	bak=$(find_backname $PREFIX$dst)
+	echo Backup $PREFIX$dst to $bak ...
+	prepend "mv $bak $PREFIX$dst"
+	mv $PREFIX$dst $bak
     fi
     echo Install $SCRIPTPATH/$src
-    prepend "[ -L $PREFIX/$dst ] && rm -f $PREFIX/$dst"
-    ln -sf $SCRIPTPATH/$src $PREFIX/$dst
+    prepend "[ -L $PREFIX$dst ] && rm -f $PREFIX$dst"
+    ln -sf $SCRIPTPATH/$src $PREFIX$dst
 }
 
 mkdir $HOME/.cargo
+
+if [ "$SCRIPTPATH" != "$HOME/.dotfiles" ]; then
+    PREFIX= make_link "" "$HOME/.dotfiles"
+fi
 
 make_link git/config               .gitconfig
 make_link git/ignore               .gitignore_global
