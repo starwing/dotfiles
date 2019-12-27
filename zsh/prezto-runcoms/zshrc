@@ -237,6 +237,7 @@ alias socks5="http_proxy=socks5://127.0.0.1:1080 https_proxy=socks5://127.0.0.1:
 
 # }}}1
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f $HOME/.zshrc.user ] && source $HOME/.zshrc.user
 
 # vim: nu et sw=2 ft=zsh sts=2 ts=8 fdm=marker fdc=2
