@@ -217,14 +217,23 @@ function collapsed_pwd() {
 # update submodule {{{1
 
 function update_submodule() {
-  find . -name config |\
-    grep git/config |\
-    grep -v ProjectToExclude |\
-    grep -v AnotherProjectToExclude |\
-    xargs -n 1 -I % sh -c '\
-    cat % | grep -m 1 url | sed "s/url = //g"; \
-    echo % | sed "s/.git\/config//g";' |\
-    xargs -n 2 echo git submodule add -f
+  git config -f .gitmodules --get-regexp '^submodule\.' | perl -lane'
+$conf{$F[0]} = $F[1]}{
+@mods = map {s,\.path$,,; $_} grep {/\.path$/} keys(%conf);
+sub expand{$i = shift; map {$conf{$i . $_}} qw(.path .url .branch)}
+for $i (@mods){
+    ($path, $url, $branch) = expand($i);
+    print(qq{rm -rf $path});
+}
+for $i (@mods){
+    ($path, $url, $branch) = expand($i);
+    if ($branch) {
+      print(qq{git submodule add -b $branch $url ./$path});
+    }
+    else {
+      print(qq{git submodule add $url ./$path});
+    }
+}'
 }
 
 
