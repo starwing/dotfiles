@@ -37,6 +37,7 @@ zstyle ':prezto:load' pmodule \
   'completion' \
   'archive' \
   'git' \
+  'history-substring-search' \
   'ssh'
 
 #
