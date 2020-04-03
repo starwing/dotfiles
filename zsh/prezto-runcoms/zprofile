@@ -50,13 +50,15 @@ _altpath=(
   $HOME/.dotfiles/{bin,sbin}
   $HOME/.ssh/usm
   $HOME/.cargo/bin
-  $HOME/Work/Local/bin
-  $HOME/bin
-  #/usr/local/opt/erlang@20/bin
-  /usr/local/opt/openresty/nginx/sbin
+  $HOME/Work/Local/{bin,sbin}
+  $HOME/.local/{bin,sbin}
+  $HOME/.{bin,sbin}
+  $HOME/{bin,sbin}
   /opt/elixir/bin
   /opt/erl/bin
   /usr/local/{bin,sbin}
+  /usr/{bin,sbin}
+  /{bin,sbin}
 )
 altpath=()
 
