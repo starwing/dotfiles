@@ -34,7 +34,7 @@ make_link() {
   fi
   dir=$(dirname "$PREFIX$dst")
   if [ ! -d "$dir" ]; then
-    mkdir "$dir"
+    mkdir -p "$dir"
   fi
   echo "Install $SCRIPTPATH/$src"
   record "[ -L $PREFIX$dst ] && rm -f $PREFIX$dst"
