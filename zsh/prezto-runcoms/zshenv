@@ -10,6 +10,7 @@ if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; t
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
 
+export TGC=1
 export GOPATH=$HOME/Work/Local
 # export MANPATH="/usr/local/man:$MANPATH"
 #export all_proxy=socks5://localhost:1080

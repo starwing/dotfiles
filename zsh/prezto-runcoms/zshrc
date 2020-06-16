@@ -108,7 +108,6 @@ zplug load
 
 # iterm2 {{{1
 
-export TGC=1
 [ -e "${HOME}/.iterm2_shell_integration.zsh" ] && \
   "${HOME}/.iterm2/it2check" && \
   source "${HOME}/.iterm2_shell_integration.zsh"
