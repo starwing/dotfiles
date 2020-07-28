@@ -54,6 +54,7 @@ _altpath=(
   $HOME/.local/{bin,sbin}
   $HOME/.{bin,sbin}
   $HOME/{bin,sbin}
+  $HOME/.mix/escripts
   /opt/elixir/bin
   /opt/erl/bin
   /usr/local/{bin,sbin}
@@ -87,4 +88,6 @@ if (( $#commands[(i)lesspipe(|.sh)] )); then
 fi
 
 [ -e "$HOME/.zprofile.user" ] && source "$HOME/.zprofile.user"
+
+(( $+commands[luarocks] )) && eval "$(luarocks path)"
 

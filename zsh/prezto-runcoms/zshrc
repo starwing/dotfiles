@@ -280,6 +280,7 @@ alias kgpa='kubectl get pods --all-namespaces'
 alias kgpw='kgp --watch'
 alias kgpwide='kgp -o wide'
 alias kep='kubectl edit pods'
+alias ked='kubectl edit deploys'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
 
