@@ -91,3 +91,5 @@ fi
 
 (( $+commands[luarocks] )) && eval "$(luarocks path)"
 
+
+export PATH="$HOME/.cargo/bin:$PATH"

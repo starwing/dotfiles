@@ -44,3 +44,6 @@
 [submodule "zsh/nnao45/zsh-kubectl-completion"]
 	path = zsh/nnao45/zsh-kubectl-completion
 	url = https://github.com/nnao45/zsh-kubectl-completion
+[submodule "tmux/plugins/tmux-continuum"]
+	path = tmux/plugins/tmux-continuum
+	url = https://github.com/tmux-plugins/tmux-continuum

@@ -125,7 +125,8 @@ fi
 function fq() {
     if [ -z ${FQ+x} ]; then
 	#local proxy=socks5://127.0.0.1:1080
-	local proxy=http://127.0.0.1:1087
+	#local proxy=http://127.0.0.1:1087
+	local proxy=http://127.0.0.1:12639
 	export all_proxy=$proxy
 	export http_proxy=$proxy
 	export https_proxy=$proxy

@@ -2,7 +2,7 @@
 	email = weasley.wx@gmail.com
 	name = Xavier Wang
 [core]
-	excludesfile = /Users/lilithgames/.gitignore_global
+	excludesfile = /Users/sw/.gitignore_global
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
