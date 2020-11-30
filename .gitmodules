@@ -47,3 +47,6 @@
 [submodule "tmux/plugins/tmux-continuum"]
 	path = tmux/plugins/tmux-continuum
 	url = https://github.com/tmux-plugins/tmux-continuum
+[submodule "zsh/Aloxaf/fzf-tab"]
+	path = zsh/Aloxaf/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab

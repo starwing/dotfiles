@@ -21,6 +21,7 @@ zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "nnao45/zsh-kubectl-completion"
+zplug "Aloxaf/fzf-tab"
 
 
 # prezto {{{2
@@ -396,3 +397,4 @@ alias kdelpvc='kubectl delete pvc'
 
 # vim: nu et sw=2 ft=zsh sts=2 ts=8 fdm=marker fdc=2
 
+export PATH="$PATH:$HOME/.ft"
