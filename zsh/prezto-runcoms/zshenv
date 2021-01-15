@@ -35,7 +35,7 @@ PERL_MM_OPT="INSTALL_BASE=/Users/starwing/perl5"; export PERL_MM_OPT;
 
 #export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles
 
-export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
+#export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
 
 (( $+commands[fd] )) && export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_DEFAULT_OPTS="--height=30% --layout=reverse --inline-info"
@@ -51,3 +51,4 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 
+source "$HOME/.cargo/env"

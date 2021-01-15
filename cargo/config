@@ -1,5 +1,5 @@
-[registry]
-index = "https://mirrors.ustc.edu.cn/crates.io-index/"
+#[registry]
+#index = "https://mirrors.ustc.edu.cn/crates.io-index/"
 
 [source.crates-io]
 registry = "https://github.com/rust-lang/crates.io-index"
