@@ -33,6 +33,14 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
 
 [ -e "$HOME/.zpreztorc" ] && source $HOME/.zpreztorc
 
+# autocomplete {{{2
+
+#zplug "marlonrichert/zsh-autocomplete"
+#
+#zstyle ':autocomplete:tab:*' fzf-completion yes
+#zstyle ':autocomplete:*' default-context history-incremental-search-backward
+#zstyle ':autocomplete:*' min-delay .3  # 300 milliseconds
+
 # z.lua & fz {{{2
 
 FZ_HISTORY_CD_CMD="_zlua"
