@@ -13,9 +13,7 @@ source $ZPLUG_ROOT/init.zsh
 
 zplug 'zplug/zplug'
 zplug "b4b4r07/zsh-vimode-visual", defer:3
-zplug "changyuheng/fz", defer:1
 zplug "junegunn/fzf"
-zplug "skywind3000/z.lua"
 zplug "sorin-ionescu/prezto", use:"init.zsh"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-history-substring-search"
@@ -43,7 +41,14 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
 
 # z.lua & fz {{{2
 
-FZ_HISTORY_CD_CMD="_zlua"
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+else
+  zplug "changyuheng/fz", defer:1
+  zplug "skywind3000/z.lua"
+  FZ_HISTORY_CD_CMD="_zlua"
+fi
+
 alias j='z'
 
 # themes {{{2
@@ -138,9 +143,9 @@ fi
 
 function fq() {
     if [ -z ${FQ+x} ]; then
-	#local proxy=socks5://127.0.0.1:1080
+	local proxy=socks5://127.0.0.1:1080
 	#local proxy=http://127.0.0.1:1087
-	local proxy=http://127.0.0.1:12639
+	#local proxy=http://127.0.0.1:12639
 	export all_proxy=$proxy
 	export http_proxy=$proxy
 	export https_proxy=$proxy
@@ -261,6 +266,7 @@ alias ta="tmux attach"
 alias love="/Applications/love.app/Contents/MacOS/love"
 alias cafe="caffeinate -is"
 alias socks5="http_proxy=socks5://127.0.0.1:1080 https_proxy=socks5://127.0.0.1:1080 all_proxy=socks5://127.0.0.1:1080 "
+alias lg="lazygit"
 
 # kubectl {{{1
 
@@ -411,3 +417,5 @@ alias kdelpvc='kubectl delete pvc'
 # vim: nu et sw=2 ft=zsh sts=2 ts=8 fdm=marker fdc=2
 
 export PATH="$PATH:$HOME/.ft"
+
+source /Users/sw/.config/broot/launcher/bash/br
