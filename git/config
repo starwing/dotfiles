@@ -17,3 +17,11 @@
 	prompt = false
 [alias]
 	d = difftool
+[submodule]
+	recursive = true
+	recurse = true
+	fetchJobs = 4
+[credential]
+	helper = store
+[pull]
+	rebase = true

@@ -1,3 +1,4 @@
+# vim: nu et sw=2 ft=zsh sts=2 ts=8 fdm=marker fdc=2
 export DOTFILES=$HOME/.dotfiles
 #zmodload zsh/zprof
 
@@ -266,7 +267,24 @@ alias ta="tmux attach"
 alias love="/Applications/love.app/Contents/MacOS/love"
 alias cafe="caffeinate -is"
 alias socks5="http_proxy=socks5://127.0.0.1:1080 https_proxy=socks5://127.0.0.1:1080 all_proxy=socks5://127.0.0.1:1080 "
-alias lg="lazygit"
+
+alias x="sh ./x"
+alias gup="git stash && git pull --rebase && git stash pop"
+alias getip="python -c 'import socket;s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM);s.connect((\"8.8.8.8\",80));print s.getsockname()[0]'"
+
+# lazygit {{{1
+
+lg()
+{
+    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
+
+    lazygit "$@"
+
+    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
+            cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
+            rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+    fi
+}
 
 # kubectl {{{1
 
@@ -414,8 +432,11 @@ alias kdelpvc='kubectl delete pvc'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f $HOME/.zshrc.user ] && source $HOME/.zshrc.user
 
-# vim: nu et sw=2 ft=zsh sts=2 ts=8 fdm=marker fdc=2
-
 export PATH="$PATH:$HOME/.ft"
 
-source /Users/sw/.config/broot/launcher/bash/br
+# broot
+[ -f "$HOME/.config/broot/launcher/bash/br" ] && source $HOME/.config/broot/launcher/bash/br
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
