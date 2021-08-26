@@ -1,7 +1,6 @@
 #!/bin/bash
 
-SCRIPT=$(perl -MCwd -e 'print Cwd::abs_path shift' "$0")
-SCRIPTPATH=$(dirname "$SCRIPT")
+SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 PREFIX=$HOME/
 UNINSTALL=$PREFIX.uninstall_dotfiles.sh
