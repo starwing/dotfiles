@@ -1,19 +1,19 @@
 [user]
-	email = weasley.wx@gmail.com
 	name = Xavier Wang
+	email = weasley.wx@gmail.com
 [core]
-    autocrlf = input
+	autocrlf = input
 	excludesfile = /Users/sw/.gitignore_global
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
+[diff]
+	tool= vimdiff
 [mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [push]
 	default = simple
-[diff]
-	tool = vimdiff
 [difftool]
 	prompt = false
 [alias]
@@ -26,6 +26,10 @@
 	helper = store
 [pull]
 	rebase = true
+[rebase]
+	autoStash = true
+[merge]
+	autoStash = true
 
 [pager]
 	diff = delta
