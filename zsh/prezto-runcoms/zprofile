@@ -55,6 +55,7 @@ _altpath=(
   $HOME/.{bin,sbin}
   $HOME/{bin,sbin}
   $HOME/.mix/escripts
+  /opt/homebrew/bin
   /opt/elixir/bin
   /opt/erl/bin
   /usr/local/{bin,sbin}
