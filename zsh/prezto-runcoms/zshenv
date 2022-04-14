@@ -17,8 +17,8 @@ export GOPATH=$HOME/Work/Local
 #export http_proxy=socks5://localhost:1080
 #export https_proxy=socks5://localhost:1080
 
-export C_INCLUDE_PATH="$HOME/Work/Local/include"
-export CPLUS_INCLUDE_PATH="$HOME/Work/Local/include"
+export C_INCLUDE_PATH="$HOME/Work/Local/include:/opt/homebrew/include"
+export CPLUS_INCLUDE_PATH="$HOME/Work/Local/include:/opt/homebrew/include"
 
 export LIBRARY_PATH="$HOME/Work/Local/lib"
 export LD_LIBRARY_PATH="$HOME/Work/Local/lib"
