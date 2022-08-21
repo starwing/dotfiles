@@ -3,14 +3,14 @@
 	email = weasley.wx@gmail.com
 [core]
 	autocrlf = input
-	excludesfile = /Users/sw/.gitignore_global
+	excludesfile = /Users/starwing/.gitignore_global
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
 [diff]
 	tool= vimdiff
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [push]
 	default = simple
@@ -19,8 +19,8 @@
 [alias]
 	d = difftool
 [submodule]
-	recursive = true
-	recurse = true
+	#recursive = true
+	#recurse = true
 	fetchJobs = 4
 [credential]
 	helper = store
@@ -61,3 +61,5 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+[commit]
+	template = /Users/starwing/.stCommitMsg
