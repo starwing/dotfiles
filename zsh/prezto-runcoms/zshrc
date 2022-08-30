@@ -460,4 +460,3 @@ export PATH="$PATH:$HOME/.ft"
 export WASMER_DIR="/home/wx/.wasmer"
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
 
-source /Users/starwing/.config/broot/launcher/bash/br
