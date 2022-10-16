@@ -53,4 +53,4 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 
-source "$HOME/.cargo/env"
+[ -e "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
