@@ -32,6 +32,13 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
 
 [ -e "$HOME/.zpreztorc" ] && source $HOME/.zpreztorc
 
+# history-substring-match {{{2
+
+if zplug check zsh-users/zsh-history-substring-search; then
+    bindkey '\eOA' history-substring-search-up
+    bindkey '\eOB' history-substring-search-down
+fi
+
 # autocomplete {{{2
 
 #zplug "marlonrichert/zsh-autocomplete"
