@@ -67,6 +67,16 @@ zstyle ':dotfiles:prompt' theme simple
 
 if zstyle -t ':dotfiles:prompt' theme simple; then
 
+autoload -Uz vcs_info
+zstyle ':vcs_info:git*' formats " on %F{magenta}%b%f" "%m%u%c"
+zstyle ':vcs_info:git*' stagedstr "!"
+zstyle ':vcs_info:git*' unstagedstr "?"
+zstyle ':vcs_info:*' disable bzr cdv darcs mtn svk tla cvs
+zstyle ':vcs_info:*' enable git svn
+#zstyle ':vcs_info:*' check-for-staged-changes yes
+#zstyle ':vcs_info:*' check-for-changes yes
+precmd() { vcs_info }
+
 NL=$'\n'
 if [[ -n $SSH_CONNECTION ]]; then
   host_color=green
@@ -82,9 +92,10 @@ setopt PROMPT_SUBST
 export PS2="%F{yellow}%(!.%#.\\\$) "
 export RPS1="%B%(?..%F{red}[%?]%f)[%F{yellow}%D{%T}%f]%b"
 export PROMPT="$NL%B%F{$user_color}%n%f @ %F{$host_color}%m%f%b"
-PROMPT+=" %B%{in [%F{cyan}\$(collapsed_pwd)%f]%b%}$NL"
-PROMPT+="%B%(1j.%F{blue}✦ %f.)%b"
-PROMPT+="%B%(?.%F{green}.%F{red})%(!.%#.\\\$)%f%b "
+PROMPT+=' %B%{in [%F{cyan}$(collapsed_pwd)%f]%b%}'
+PROMPT+='%{${vcs_info_msg_0_}${vcs_info_msg_1_:+ [$vcs_info_msg_1_]}%}$NL'
+PROMPT+='%B%(1j.%F{blue}✦ %f.)%b'
+PROMPT+='%B%(?.%F{green}.%F{red})%(!.%#.\$)%f%b '
 
 fi
 
