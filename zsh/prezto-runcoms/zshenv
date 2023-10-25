@@ -25,8 +25,8 @@ export LD_LIBRARY_PATH="$HOME/Work/Local/lib"
 export DYLD_LIBRARY_PATH="$HOME/Work/Local/lib"
 export LD_LIBRARY_PATHS="$HOME/Work/Local/lib"
 
-export LUA_PATH_5_3="./?.lua;./?/init.lua;;"
-export LUA_CPATH_5_3="./?.so;./loadall.so;;"
+export LUA_PATH_5_4="./?.lua;./?/init.lua;;"
+export LUA_CPATH_5_4="./?.so;./loadall.so;;"
 
 PERL5LIB="/Users/starwing/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="/Users/starwing/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;

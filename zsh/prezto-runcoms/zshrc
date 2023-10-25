@@ -72,9 +72,10 @@ zstyle ':vcs_info:git*' formats " on %F{magenta}%b%f" "%m%u%c"
 zstyle ':vcs_info:git*' stagedstr "!"
 zstyle ':vcs_info:git*' unstagedstr "?"
 zstyle ':vcs_info:*' disable bzr cdv darcs mtn svk tla cvs
-zstyle ':vcs_info:*' enable git svn
-#zstyle ':vcs_info:*' check-for-staged-changes yes
-#zstyle ':vcs_info:*' check-for-changes yes
+#zstyle ':vcs_info:*' enable git svn
+zstyle ':vcs_info:*' enable svn
+zstyle ':vcs_info:*' check-for-staged-changes yes
+zstyle ':vcs_info:*' check-for-changes yes
 precmd() { vcs_info }
 
 NL=$'\n'
