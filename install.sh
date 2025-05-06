@@ -49,7 +49,7 @@ fi
 make_link git/config               .gitconfig
 make_link git/ignore               .gitignore_global
 make_link git/commit_msg           .stCommitMsg
-make_link cargo/config             .cargo/config
+make_link cargo/config.yaml        .cargo/config.yaml
 make_link tmux                     .tmux
 make_link tmux/tmux.conf           .tmux.conf
 make_link vim                      .vim

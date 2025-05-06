@@ -3,7 +3,7 @@
 	email = weasley.wx@gmail.com
 [core]
 	autocrlf = input
-	excludesfile = /Users/starwing/.gitignore_global
+	excludesfile = /Users/sw/.gitignore_global
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
@@ -63,3 +63,5 @@
 	smudge = git-lfs smudge -- %f
 [fetch]
 	recurseSubmodules = yes
+[commit]
+	template = /Users/sw/.stCommitMsg
