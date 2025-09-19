@@ -32,6 +32,7 @@
 [submodule "zsh/zplug/zplug"]
 	path = zsh/zplug/zplug
 	url = https://github.com/zplug/zplug
+	ignore = untracked
 [submodule "zsh/zsh-users/zsh-autosuggestions"]
 	path = zsh/zsh-users/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions

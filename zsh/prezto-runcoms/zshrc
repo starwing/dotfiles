@@ -484,3 +484,4 @@ export WASMER_DIR="/home/wx/.wasmer"
 
 # Added by Windsurf
 export PATH="/Users/sw/.codeium/windsurf/bin:$PATH"
+export PATH="/opt/homebrew/opt/bison/bin:$PATH"
