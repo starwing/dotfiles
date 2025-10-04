@@ -480,8 +480,6 @@ export WASMER_DIR="/home/wx/.wasmer"
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
 
 
-. "$HOME/.cargo/env"
-
 # Added by Windsurf
 export PATH="/Users/sw/.codeium/windsurf/bin:$PATH"
 export PATH="/opt/homebrew/opt/bison/bin:$PATH"
