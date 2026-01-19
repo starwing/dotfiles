@@ -90,9 +90,11 @@ fi
 
 [ -e "$HOME/.zprofile.user" ] && source "$HOME/.zprofile.user"
 
+LUA_PATH_5_5_old=$LUA_PATH_5_5
+LUA_CPATH_5_5_old=$LUA_CPATH_5_5
 (( $+commands[luarocks] )) && eval "$(luarocks path)"
-
-
+export LUA_PATH_5_5="$LUA_PATH_5_5$LUA_PATH_5_5_old"
+export LUA_CPATH_5_5="$LUA_CPATH_5_5$LUA_CPATH_5_5_old"
 
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
