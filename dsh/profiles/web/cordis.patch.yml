@@ -1,0 +1,39 @@
+# Your patch layer for this dsh profile, applied after every bundle layer:
+# a top-level YAML array of loader patch entries (id-targeted config
+# overrides, disables, and insert lists; `!!js` expressions allowed).
+# []
+- id: compaction-basic
+  disabled: true
+- id: compaction-acp
+  name: 'billion-context-dsh'
+  config:
+    modelContextLimit: 256000   # 可选；省略时自动探测模型真实窗口（回退 128000）
+    prompts:
+      nudge:
+        normal: |
+          上下文使用率 {pct}%。这是效率提示——请尽早压缩保持上下文精简。
+          如果在任务中需要上下文信息，可以先不压缩，任务完成后再压缩。
+          不要过度删减，保证当前工作上下文完整，避免删减后重读。
+- id: terminal-bash
+  # Fix persistent-bash hangs on macOS. A patch replaces the whole config,
+  # so shellPath/timeoutMs must be restated here.
+  config:
+    shellPath: !!js "process.getBuiltinModule?.('node:fs')?.existsSync('/bin/bash') ? '/bin/bash' : 'bash'"
+    timeoutMs: 300000
+    shellArgs:
+      - --noprofile
+      - --rcfile
+      # Bash expands the leading `~`, so this stays portable across
+      # machines/users without hard-coding an absolute path.
+      - ~/.dsh/bashrc.dsh
+      # Do NOT add --noediting here: it disables readline and leaves the pty
+      # in canonical mode, which deadlocks on macOS when a single write to the
+      # pty exceeds the ~512B canonical line buffer (large heredocs / long
+      # single-quoted commands hang until the 300s timeout).
+      - -i
+- id: dsh-notifier
+  name: dsh-notifier
+  config:
+    admin.enabled: true
+- id: dsh-better-edit
+  disabled: true

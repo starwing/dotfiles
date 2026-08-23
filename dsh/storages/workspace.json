@@ -1,0 +1,73 @@
+{
+  "unit": {
+    "name": "workspace",
+    "version": 2
+  },
+  "global": {
+    "initialized": true,
+    "workspaceIds": [
+      "5f66d676-d42a-4e4e-8748-d9afa5ea4d83",
+      "573f5d23-d44a-461a-b9fa-1e21dcf6245e"
+    ],
+    "archivedSessionIds": [
+      "session-273465c8-c1ea-4656-8925-ad62204eae0b",
+      "session-8e4d3817-5917-4afb-ab58-c26ef61164fd"
+    ]
+  },
+  "tables": {
+    "workspaces": {
+      "573f5d23-d44a-461a-b9fa-1e21dcf6245e": {
+        "path": "/Users/sw/Library/CloudStorage/SynologyDrive-Home/Work/Code/piecetab",
+        "title": "piecetab",
+        "sessionIds": [
+          "session-3d6f2a6c-0928-45ed-8ead-a576f97cd8f0",
+          "session-b6ec0ab0-ab6b-419a-be95-050edc4c6b58",
+          "session-c5b63d01-f095-4aa0-8e79-d8598194f99b",
+          "session-d168110e-36b5-4d29-ad8b-ca80e6988cd9",
+          "session-46366913-514d-4c23-9c17-2fcf97b35d6f",
+          "session-7016ddd8-955f-4fc9-b39b-05871224dcdf",
+          "session-0e0361af-9f30-4ba1-8288-6545862344c9",
+          "session-a4fb8805-ab9f-4323-bd96-ad5c3e635b89",
+          "session-a6461727-a3fb-4f38-aeaf-e0feb2bfeeb6",
+          "session-5574720e-2c0d-4df5-952a-0a653d1144d3",
+          "session-5078600c-1880-44c0-b5d9-8ecef909d4f6",
+          "session-4b6a3174-21eb-41a7-ab50-144ad469557c",
+          "session-91dab4b9-fa10-47d0-b7d0-3723ef8da202",
+          "session-8b1718d0-18d2-49fd-8698-68c089d7100b",
+          "session-2fff0ad2-3de2-4d3c-b866-41332515fc3e",
+          "session-9107ff78-1506-4a93-992d-48ba64cb1bac",
+          "session-3a72bd7b-5dcf-4808-b01a-c73efed7cccb",
+          "session-06c8de1c-b699-4d33-856a-6fd290804398",
+          "session-35965416-7859-46f2-b7fd-b1f65fcf7b01",
+          "session-441e09f5-1343-45c0-bab4-e0649655501f",
+          "session-d4c2d9b2-6982-48b8-a9b9-33d6a22a02fb",
+          "session-79472223-389d-45fa-8f96-d5e0bd0b3060",
+          "session-3d03aac9-ea27-4b95-b29a-8c117a4a2828",
+          "session-c46c4f57-c9d6-48b0-bc34-8ff3706a5001",
+          "session-a72a6c6e-b22f-44c2-a42e-71065a61efb7",
+          "session-5e85fbdb-436f-49fa-8c02-0226e4d4ef56",
+          "session-8e4d3817-5917-4afb-ab58-c26ef61164fd",
+          "session-34e5b595-cd44-4e7d-8739-b8c44122e929",
+          "session-b096be17-1e0e-48c2-bc4e-8523627f5a40",
+          "session-7c1188fd-4aa4-4a2f-9aea-2a169987d816",
+          "session-b170c1d2-ce41-4d4c-9ca7-81be12141124",
+          "session-99fbe957-6b29-4b19-96e4-4943233d4953",
+          "session-273465c8-c1ea-4656-8925-ad62204eae0b",
+          "session-cb45e364-0e58-4e0f-b65a-1ee02da14493",
+          "session-41b1e4a9-3338-4553-9824-1cc4bf1a80d7"
+        ],
+        "createdAt": "2026-08-13T13:27:58.473Z",
+        "updatedAt": "2026-08-23T16:42:26.818Z"
+      },
+      "5f66d676-d42a-4e4e-8748-d9afa5ea4d83": {
+        "path": "/opt/dotfiles/neovim",
+        "title": "neovim",
+        "sessionIds": [
+          "session-f575e7ff-2d58-489c-a984-b488916d031f"
+        ],
+        "createdAt": "2026-08-23T16:44:00.764Z",
+        "updatedAt": "2026-08-23T16:44:00.815Z"
+      }
+    }
+  }
+}

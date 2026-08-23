@@ -1,0 +1,16 @@
+packages:
+  - .
+
+nodeLinker: hoisted
+autoInstallPeers: false
+minimumReleaseAgeExclude:
+  - dsh-recover-context@1.0.2
+  - dsh-context@0.17.0 || 0.21.0 || 0.25.3
+  - dshmarket@1.17.1 || 1.18.1
+  - billion-context-dsh@0.2.8 || 0.2.10
+  - dsh-cost-meter@1.5.33 || 1.5.38
+  - dsh-better-sidebar@0.15.2
+  - dsh-notifier@0.8.5
+allowBuilds:
+  node-pty: true
+  protobufjs: true

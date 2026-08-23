@@ -1,0 +1,44 @@
+{
+  "name": "dsh-profile-web",
+  "private": true,
+  "dsh": {
+    "profile": {
+      "bundles": [
+        "@deepseek-ai/dsh-base",
+        "@deepseek-ai/dsh-web-app",
+        "@dsh-external/dsh-diff-viewer",
+        "@vlln/dsh-navbar",
+        "billion-context-dsh",
+        "dsh-at-file",
+        "dsh-better-edit",
+        "dsh-better-sidebar",
+        "dsh-context",
+        "dsh-cost-meter",
+        "dsh-message-edit",
+        "dsh-miraculous-standard",
+        "dsh-niao-message",
+        "dsh-notifier",
+        "dsh-terminal",
+        "dsh-turn-delete",
+        "dshmarket"
+      ]
+    }
+  },
+  "dependencies": {
+    "@dsh-external/dsh-diff-viewer": "github:lehhair/dsh-diff-viewer",
+    "@vlln/dsh-navbar": "github:vlln/dsh-navbar",
+    "billion-context-dsh": "^0.2.11",
+    "dsh-at-file": "https://github.com/omdsh-dev/dsh-at-file/archive/refs/tags/v0.6.5.tar.gz",
+    "dsh-better-edit": "^0.3.1",
+    "dsh-better-sidebar": "^0.15.2",
+    "dsh-context": "^0.25.3",
+    "dsh-cost-meter": "^1.5.38",
+    "dsh-message-edit": "^0.2.3",
+    "dsh-miraculous-standard": "github:rinDBeans/dsh-miraculous-standard",
+    "dsh-niao-message": "^0.1.4",
+    "dsh-notifier": "^0.8.6",
+    "dsh-terminal": "^0.1.1",
+    "dsh-turn-delete": "github:hanshenmesen/dsh-turn-delete",
+    "dshmarket": "^1.20.0"
+  }
+}

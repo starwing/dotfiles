@@ -1,0 +1,17 @@
+# dsh persistent-bash startup overrides
+#
+# This file lives at the default DSH home (~/.dsh) and is referenced from
+# terminal-bash's shellArgs as `--rcfile ~/.dsh/bashrc.dsh` (bash expands the
+# tilde itself, so no hard-coded absolute path is needed).
+#
+# Fix 1: disable bash history expansion. `!` inside single-quoted arguments
+# (e.g. `rg --files -g '!node_modules'`) otherwise triggers interactive
+# history expansion and can hang the persistent PTY shell.
+set +H
+
+# Fix 2: force a UTF-8 locale on macOS bash 3.2. Without it, readline treats
+# high-bit bytes (CJK input, non-ASCII output) as Meta key bindings and can
+# stall until the 300s timeout.
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8

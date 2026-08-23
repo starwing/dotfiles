@@ -1,0 +1,3 @@
+name: Miraculous Standard (Pro/Flash unified, experimental)
+description: Two-stage anchored bootstrap for DeepSeek V4 Pro and V4 Flash on both the official API and the opencode-go subscription endpoint. Unified context gate, epoch-aware promotion, non-imperative instruction hints, rc7-ready Windows/POSIX shell handling. First request anchors on the Minimal preset's real RL tool pair (bash + str_replace_editor) with auto-injected context stripped; after the first durable promotion signal, Pro narrows to a resident discovery catalog while Flash gets a god-mode persona and the full Standard catalog. Path selection keys on the model id (/flash/i), not the provider.
+order: 5

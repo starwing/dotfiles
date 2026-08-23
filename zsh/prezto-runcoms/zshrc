@@ -485,3 +485,6 @@ export WASMER_DIR="/home/wx/.wasmer"
 export PATH="/Users/sw/.codeium/windsurf/bin:$PATH"
 export PATH="/opt/homebrew/opt/bison/bin:$PATH"
 
+
+# Created by `pipx` on 2026-06-18 08:50:29
+export PATH="$PATH:/Users/sw/.local/bin"

@@ -1,0 +1,28 @@
+{
+  "enabled": true,
+  "allowRepeat": false,
+  "click": {},
+  "throttleMs": 3000,
+  "approvalGraceMs": 1000,
+  "pendingMaxAgeMs": 300000,
+  "groups": {
+    "abnormal": {
+      "enabled": true,
+      "sound": "Sosumi",
+      "title": "DSH · 任务异常终止",
+      "message": "任务未能正常完成：{reason}"
+    },
+    "waiting": {
+      "enabled": true,
+      "sound": "Ping",
+      "title": "DSH · 需要你操作",
+      "message": "对话已暂停，等待你的确认或授权"
+    },
+    "success": {
+      "enabled": true,
+      "sound": "Glass",
+      "title": "DSH · 任务完成",
+      "message": "任务已顺利完成"
+    }
+  }
+}
