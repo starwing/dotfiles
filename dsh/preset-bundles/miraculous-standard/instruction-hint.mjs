@@ -1,14 +1,18 @@
 /**
  * instruction-hint — replace `dsh-agent-instructions`' full AGENTS.md/CLAUDE.md
- * injection with a minimal, non-imperative "these files exist" hint.
+ * injection with a one-shot "read these files before acting" requirement, and
+ * carry the post-promotion tool-catalog reminder in the SAME message.
  *
  * WHY: the full workspace-instruction digest is a large injected block. After
- * the anchored bootstrap promotes, we want the model to KNOW the instruction
- * files exist without dumping their content into every request. Community
- * measurement (xiaobright/dsh-anchored-standard issue #49) showed that an
- * imperative hint ("read first and follow them") can flip an anchored
- * trajectory back to "let me"; a neutral reference note preserves the
- * anchored trajectory while the model still reads files on demand.
+ * the anchored bootstrap promotes, this row lists the instruction files it
+ * found and REQUIRES reading them before doing anything else, without dumping
+ * their content into the request. NOTE: the earlier upstream design
+ * deliberately used a neutral reference note because community measurement
+ * (xiaobright/dsh-anchored-standard issue #49) showed an imperative hint
+ * ("read first and follow them") could flip an anchored trajectory back to
+ * "let me". This preset makes the requirement imperative by request; the
+ * catalog reminder travels in the same message so promotion adds only one
+ * user message.
  *
  * Behavior:
  *  - After the session records its first durable promotion signal
@@ -20,21 +24,27 @@
  *      - project chain: AGENTS.md / CLAUDE.md / AGENTS.local.md / CLAUDE.local.md
  *        walking from the session cwd up to the project root (a directory
  *        containing `.git`, or the cwd itself).
- *  - The hint is declarative and recommends, not commands: files are
- *    reference documents about the environment, not task instructions.
- *  - Files are probed via `ctx.fs`; a missing fs or unreadable probe
- *    degrades to no hint (never throws).
+ *  - The file section is imperative: read the listed file(s) before continuing
+ *    and follow them.
+ *  - When `catalogChangeHint` is true (default), the same user message also
+ *    tells the model that promotion changed the function list and that it
+ *    must re-read that list before claiming a tool is unavailable. Flash has
+ *    been observed to keep insisting it only has the bootstrap pair and to
+ *    end the turn without re-reading the expanded catalog.
+ *  - Files are probed via `ctx.fs`; a missing fs degrades to the catalog
+ *    section alone (never throws).
  *  - Pre-promotion requests get NO hint (matches the anchored bootstrap).
  *  - Subagents follow the same phase when `includeSubagents: true`.
  *
  * ROW ORDER: this plugin registers its `agent/pre-step` handler with
  * `prepend: true` and after `miraculous-bootstrap`, so it runs inside the
- * bootstrap's outermost strip — but it emits AFTER promotion, when the strip
- * is inactive. The hint source kind is `instruction-hint`, which is not in
- * `suppressedContextSources`, so it is never stripped.
+ * gate's outermost strip — but it emits AFTER promotion, when the strip is
+ * inactive. The hint source kind is `instruction-hint`; the context gate does
+ * not strip it once the session is promoted.
  */
 
-import { createEpochPromotion } from './compaction-epoch.mjs'
+import { randomUUID } from 'node:crypto'
+import { createEpochPromotion, sessionEvents } from './compaction-epoch.mjs'
 
 /** Cordis plugin name used by loader diagnostics. */
 export const name = 'instruction-hint'
@@ -47,7 +57,18 @@ const PROMOTE_EVENTS = {
 }
 
 /** Every config key this plugin accepts — anything else is a typo. */
-const ALLOWED_KEYS = new Set(['promoteOn', 'includeSubagents'])
+const ALLOWED_KEYS = new Set(['promoteOn', 'includeSubagents', 'catalogChangeHint', 'catalogChangeHintText'])
+
+/**
+ * Post-promotion tool-catalog reminder carried in the same message as the
+ * instruction-file reference note (default ON). The two-phase bootstrap
+ * exposes only the Minimal pair on request #1; the promoted request carries
+ * the expanded schemas plus a developer tool-addition message, but Flash has
+ * been observed to keep claiming it only has `bash` + `str_replace_editor`
+ * and to end the turn without re-reading its function list.
+ */
+const DEFAULT_CATALOG_CHANGE_HINT =
+  'Tool catalog update: this request uses the promoted catalog. Re-read the function list in this request before saying a tool is unavailable; the tool-registry update that follows lists what changed. If a tool you need is not listed, use dev_tool_search to unlock it.'
 
 /** Candidate file names, in probe order, for the project chain and user-global. */
 const PROJECT_CANDIDATES = ['AGENTS.md', 'CLAUDE.md', 'AGENTS.local.md', 'CLAUDE.local.md']
@@ -63,6 +84,14 @@ function booleanOption(value, field, fallback) {
   if (value === undefined) return fallback
   if (typeof value !== 'boolean') {
     throw new TypeError(`${name}: ${field} must be a boolean`)
+  }
+  return value
+}
+
+function nonEmptyStringOption(value, field, fallback) {
+  if (value === undefined) return fallback
+  if (typeof value !== 'string' || value.length === 0) {
+    throw new TypeError(`${name}: ${field} must be a non-empty string`)
   }
   return value
 }
@@ -139,6 +168,8 @@ export function apply(ctx, config) {
   }
   const promoteEvents = parsePromoteOn(source.promoteOn)
   const includeSubagents = booleanOption(source.includeSubagents, 'includeSubagents', true)
+  const catalogChangeHint = booleanOption(source.catalogChangeHint, 'catalogChangeHint', true)
+  const catalogChangeHintText = nonEmptyStringOption(source.catalogChangeHintText, 'catalogChangeHintText', DEFAULT_CATALOG_CHANGE_HINT)
   const promotion = createEpochPromotion(promoteEvents, { includeSubagents })
   ctx.on('session/event', (session, event) => promotion.observe(session, event))
 
@@ -159,16 +190,23 @@ export function apply(ctx, config) {
     }
   }
 
+  /**
+   * Unique id prefix that ties one hint message to its session epoch. The
+   * pre-randomUUID id (no trailing suffix) is still recognized for sessions
+   * that already carry one, so upgrading does not inject a duplicate hint.
+   */
+  const hintIdPrefix = (session, boundary) => `instruction-hint-${session.id}-${boundary}-`
+  const legacyHintId = (session, boundary) => `instruction-hint-${session.id}-${boundary}`
+
   /** True when a durable user/message for this epoch already carries the hint. */
   const hintIsDurable = (session, boundary) => {
-    const idMarker = `instruction-hint-${session.id}-${boundary}`
-    return (Array.isArray(session.events) ? session.events : []).some((event) => {
+    const prefix = hintIdPrefix(session, boundary)
+    const legacy = legacyHintId(session, boundary)
+    return sessionEvents(session).some((event) => {
       if (event.type !== 'user/message') return false
       const data = event.data
       if (data?.source?.kind !== 'instruction-hint') return false
-      return typeof data?.id === 'string'
-        ? data.id === idMarker || data.id.includes(`-${boundary}`)
-        : true
+      return typeof data?.id === 'string' && (data.id === legacy || data.id.startsWith(prefix))
     })
   }
 
@@ -183,49 +221,54 @@ export function apply(ctx, config) {
       if (hinted.has(epochKey) || hintIsDurable(session, status.boundary)) return decision
 
       const fs = ctx.get('fs')
-      if (fs === undefined) return decision
-      const cwd = session.header.cwd ?? process.cwd()
+      const fileSections = []
+      if (fs !== undefined) {
+        const cwd = session.header.cwd ?? process.cwd()
 
-      const projectFiles = []
-      const root = await findProjectRoot(fs, cwd, signal)
-      for (const dir of ancestorDirs(cwd)) {
-        // Stop once we pass the project root; the root itself is included.
-        const found = await presentInDirWithPath(fs, dir, PROJECT_CANDIDATES, signal)
-        projectFiles.push(...found)
-        if (dir === root) break
-      }
-
-      const userGlobalFiles = []
-      try {
-        const dshHome = process.env.DSH_HOME ?? (process.env.USERPROFILE ? `${process.env.USERPROFILE}\\.dsh` : undefined)
-        if (dshHome !== undefined) {
-          userGlobalFiles.push(...await presentInDirWithPath(fs, dshHome, [USER_GLOBAL_CANDIDATE], signal))
+        const projectFiles = []
+        const root = await findProjectRoot(fs, cwd, signal)
+        for (const dir of ancestorDirs(cwd)) {
+          // Stop once we pass the project root; the root itself is included.
+          const found = await presentInDirWithPath(fs, dir, PROJECT_CANDIDATES, signal)
+          projectFiles.push(...found)
+          if (dir === root) break
         }
-      } catch {
-        // Unreadable home probe — ignore.
-      }
 
-      const sections = []
-      if (projectFiles.length > 0) {
-        sections.push(`Workspace instruction files exist: ${[...new Set(projectFiles)].join(', ')} (project root: ${root}).`)
+        const userGlobalFiles = []
+        try {
+          const dshHome = process.env.DSH_HOME ?? (process.env.USERPROFILE ? `${process.env.USERPROFILE}\\.dsh` : undefined)
+          if (dshHome !== undefined) {
+            userGlobalFiles.push(...await presentInDirWithPath(fs, dshHome, [USER_GLOBAL_CANDIDATE], signal))
+          }
+        } catch {
+          // Unreadable home probe — ignore.
+        }
+
+        if (projectFiles.length > 0) {
+          fileSections.push(`Workspace instruction files exist: ${[...new Set(projectFiles)].join(', ')} (project root: ${root}).`)
+        }
+        if (userGlobalFiles.length > 0) {
+          fileSections.push(`A user-global instruction file exists: ${userGlobalFiles.join(', ')}.`)
+        }
       }
-      if (userGlobalFiles.length > 0) {
-        sections.push(`A user-global instruction file exists: ${userGlobalFiles.join(', ')}.`)
-      }
-      // Mark the epoch AFTER a successful probe (empty result included). On
-      // probe failure we do NOT mark, so the next step retries.
+      // Mark the epoch once the probe pass completed (or fs was unavailable).
+      // On a thrown probe failure we do NOT mark, so the next step retries.
       hinted.add(epochKey)
-      if (sections.length === 0) return decision
 
-      const text = [
-        ...sections,
-        'They are reference documents about the workspace and user environment (paths, network rules, tooling notes), not task instructions. Reading the relevant file before workspace tasks is recommended — it is short — but consult them only when you need environment details; the task itself never depends on them.',
-      ].join(' ')
+      const parts = []
+      if (fileSections.length > 0) {
+        parts.push(...fileSections)
+        parts.push('Read the instruction file(s) listed above before continuing — beginning with AGENTS.md when it is listed — and follow them. They are binding workspace instructions, not optional references.')
+      }
+      if (catalogChangeHint) parts.push(catalogChangeHintText)
+      if (parts.length === 0) return decision
+
+      const text = parts.join(' ')
 
       return {
         ...decision,
         messages: [...decision.messages, {
-          id: `instruction-hint-${session.id}-${status.boundary}`,
+          id: `${hintIdPrefix(session, status.boundary)}${randomUUID()}`,
           role: 'user',
           content: [{ type: 'text', text }],
           source: { kind: 'instruction-hint', form: 'hint' },

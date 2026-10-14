@@ -17,9 +17,13 @@
  *     `bash` + `str_replace_editor` (issue #11: this schema anchors 5/5 at
  *     the adapter-default maxTokens=256000; every standard-family schema —
  *     pwsh/read, pwsh alone, sandbox bash/read — went standard-like 11/11);
- *   - strips the two automatic context injections Standard adds over Minimal
- *     (AGENTS.md/CLAUDE.md digest and the available-skills catalog — with
+ *   - leaves automatic context suppression to the companion `context-gate`
+ *     row (AGENTS.md/CLAUDE.md digest and the available-skills catalog, with
  *     them present the anchor reproduced 0/9, without ~81%);
+ *   - appends ONE user-role first-turn reminder that makes the We need anchor
+ *     explicit and states that the bootstrap pair is intentional: the full
+ *     catalog arrives after the first assistant message/tool call, so the
+ *     model must not refuse before that step;
  *   - optional first-request output cap (`bootstrapMaxTokens`, opt-in —
  *     the 1024 cap anchors 26/32 but its delivery is profile-package
  *     dependent, so the schema lever is the default).
@@ -38,6 +42,11 @@
  *     section is replaced by the god-mode persona (router-standard w7 +
  *     deep anchor + the P10 convergence binding) on EVERY request, and the
  *     promoted catalog is the full Standard set (configurable to `resident`).
+ *     NOTE: the bundled persona row is `complete: true`, so the prompt registry
+ *     restores the complete section after this waterfall and the replacement
+ *     is inactive — intentionally, to preserve the exact Zhihu opening anchor
+ *     on both paths. This branch applies only to compositions that remove
+ *     `complete` from the persona row.
  *
  * COMPACTION: a compaction rewrites the model-visible surface, so the first
  * post-compaction request is a "second first request". Promotion is
@@ -57,12 +66,14 @@
  * ROBUSTNESS (inherited discipline):
  *  - A missing bootstrap tool degrades to the full catalog with a one-time
  *    warning instead of bricking the session.
- *  - The pre-step context filter degrades to "keep everything" on failure:
- *    a filter bug must never eat the user's context.
- *  - No synthetic messages are ever injected (the myDshPresets missing-id
- *    incident corrupted session histories); no extra model calls (the
- *    zero-tool/whoami anchors cost +1 call per session AND lose the
- *    trajectory once tools appear — measured on opencode-go).
+ *  - No synthetic messages are injected on the MAIN bootstrap path (the
+ *    myDshPresets missing-id incident corrupted session histories). The one
+ *    exception is the first-turn anchor/tool-phase reminder, which carries a
+ *    durable prefixed id and can be disabled with `firstTurnHint: false`; the
+ *    post-promotion catalog reminder lives in the companion instruction-hint
+ *    row. No extra model calls are ever made (the zero-tool/whoami anchors
+ *    cost +1 call per session AND lose the trajectory once tools appear —
+ *    measured on opencode-go).
  *  - Invalid config fails at preset mount, where it is visible and fixable.
  */
 
@@ -70,10 +81,9 @@ export const name = 'miraculous-bootstrap'
 
 /**
  * Deliberately NO inject list: the listeners only touch services at event
- * time. Registering without an inject — combined with this row being FIRST
- * in agent.cordis.yml and the `prepend` flags below — keeps the bootstrap
- * strip the OUTERMOST waterfall transform, so the first-request strip
- * actually removes what dsh-agent-instructions / dsh-tool-skill inject.
+ * time. First-request context suppression is owned by the companion
+ * `context-gate` row; this plugin narrows only the tool catalog, so its row
+ * can stay second and register before later tool rows.
  */
 export const inject = []
 
@@ -89,7 +99,6 @@ const ALLOWED_KEYS = new Set([
   'bootstrapTools',
   'promoteOn',
   'bootstrapMaxTokens',
-  'suppressedContextSources',
   'compactionTools',
   'residentTools',
   'forcePath',
@@ -99,15 +108,9 @@ const ALLOWED_KEYS = new Set([
   'includeSubagents',
   'proDisciplineHint',
   'proDisciplineHintText',
+  'firstTurnHint',
+  'firstTurnHintText',
 ])
-
-/**
- * Context sources stripped from the first request by default: the two
- * automatic `agent/pre-step` injections Standard adds over Minimal —
- * the available-skills reminder (`skill-catalog`) and the AGENTS.md/CLAUDE.md
- * workspace digest (`agent-instructions`).
- */
-const DEFAULT_SUPPRESSED_SOURCES = ['skill-catalog', 'agent-instructions']
 
 /** The official Minimal preset's exact tool pair (issue #11 anchor). */
 const DEFAULT_BOOTSTRAP_TOOLS = ['bash', 'str_replace_editor']
@@ -149,7 +152,8 @@ const DEFAULT_FLASH_PERSONA =
  * growth-rescan fix exists in exactly ONE place — the two trackers had
  * diverged, leaving instruction-hint on the stale upstream logic.
  */
-import { createEpochPromotion } from './compaction-epoch.mjs'
+import { randomUUID } from 'node:crypto'
+import { createEpochPromotion, sessionEvents } from './compaction-epoch.mjs'
 
 /** True when the routed model id is a Flash-family model. */
 function isFlashModel(modelId) {
@@ -175,10 +179,34 @@ const DEFAULT_PRO_DISCIPLINE_HINT =
   + 'keep a running tally of remaining budget and say so when a verification step is expensive.'
 
 /**
+ * First-request anchor + tool-phase reminder (default ON). Injected as one
+ * user-role message on the pre-promotion request of EVERY session (main and
+ * child). The persona is a complete prompt and no longer mentions AGENTS.md;
+ * without a concrete first action Flash tends to open its reasoning with
+ * "The user..." / "Let me..." and to refuse a delegation request because the
+ * bootstrap pair does not list subagent/dev_tool_search. This reminder makes
+ * the "We need" anchor explicit and tells the model the bootstrap catalog is
+ * intentional: the full catalog arrives after the first assistant message or
+ * tool call, so it must not refuse or end the turn before that step. The
+ * companion context-gate row must allowlist the source kind
+ * `miraculous-first-turn-hint` for this message to survive the default-deny.
+ * Opt out with `firstTurnHint: false`.
+ */
+const DEFAULT_FIRST_TURN_HINT =
+  'First-request requirements: (1) when you think, think in ENGLISH and begin every reasoning block with exactly "We need"; (2) this first request intentionally exposes only bash and str_replace_editor — after your first assistant message or tool call, the full tool catalog (including dev_tool_search and subagent) becomes available. Before that step, do not claim those tools are unavailable and do not end the turn just because they are not listed yet.'
+
+/**
  * Replace ONLY the persona section of an assembled section list, keeping
  * everything else — the plan-mode section above all (router-standard §G:
  * an early router replaced the whole section list, dropped the plan-mode
  * section, and the model lost the plan boundary → repeated searches).
+ *
+ * NOTE: the bundled persona row sets `complete: true`, so the prompt registry
+ * captures that complete section before this waterfall and restores it after,
+ * which makes this replacement effectively inactive for the bundled preset.
+ * That is intentional: it preserves the Zhihu opening anchor for BOTH Pro and
+ * Flash. This helper stays for compositions that remove `complete` and want
+ * the Flash god-mode persona instead.
  */
 function applyPersona(sections, personaText) {
   const rest = (sections || []).filter(
@@ -203,18 +231,6 @@ function parsePromoteOn(value) {
   if (value === undefined || value === 'either') return PROMOTE_EVENTS.either
   if (value === 'tool-call' || value === 'assistant-message') return PROMOTE_EVENTS[value]
   throw new TypeError(`${name}: promoteOn must be one of "tool-call", "assistant-message", "either"; got ${JSON.stringify(value)}`)
-}
-
-/**
- * Validate the suppressed context sources. An explicitly empty array is
- * meaningful: it disables the context filter while keeping the tool bootstrap.
- */
-function sourceList(value, field, fallback) {
-  if (value === undefined) return new Set(fallback)
-  if (!Array.isArray(value) || value.some((item) => typeof item !== 'string' || item.length === 0)) {
-    throw new TypeError(`${name}: ${field} must be an array of non-empty strings`)
-  }
-  return new Set(value)
 }
 
 /**
@@ -279,7 +295,6 @@ export function apply(ctx, config) {
     : stringList(source.residentTools, 'residentTools')
   const promoteEvents = parsePromoteOn(source.promoteOn)
   const bootstrapMaxTokens = optionalPositiveInt(source.bootstrapMaxTokens, 'bootstrapMaxTokens')
-  const suppressedSources = sourceList(source.suppressedContextSources, 'suppressedContextSources', DEFAULT_SUPPRESSED_SOURCES)
   // Core work set exposed after a compaction, before re-promotion.
   const compactionTools = stringListOrEmpty(source.compactionTools, 'compactionTools')
 
@@ -291,6 +306,8 @@ export function apply(ctx, config) {
   const includeSubagents = optionalBoolean(source.includeSubagents, 'includeSubagents', true)
   const proDisciplineHint = optionalBoolean(source.proDisciplineHint, 'proDisciplineHint', false)
   const proDisciplineHintText = optionalNonEmptyString(source.proDisciplineHintText, 'proDisciplineHintText', DEFAULT_PRO_DISCIPLINE_HINT)
+  const firstTurnHint = optionalBoolean(source.firstTurnHint, 'firstTurnHint', true)
+  const firstTurnHintText = optionalNonEmptyString(source.firstTurnHintText, 'firstTurnHintText', DEFAULT_FIRST_TURN_HINT)
 
   const promotion = createEpochPromotion(promoteEvents, { includeSubagents })
   ctx.on('session/event', (session, event) => promotion.observe(session, event))
@@ -320,8 +337,8 @@ export function apply(ctx, config) {
    */
   const unlockedFor = (session, boundary) => {
     const unlocked = new Set()
-    if (session === undefined || !Array.isArray(session.events)) return unlocked
-    for (const event of session.events) {
+    if (session === undefined) return unlocked
+    for (const event of sessionEvents(session)) {
       if (event.type !== 'tool/call') continue
       const seq = event.seq ?? 0 // seq-less events are treated as post-boundary
       if (boundary >= 0 && seq <= boundary) continue
@@ -421,49 +438,89 @@ export function apply(ctx, config) {
     }, { prepend: true })
   }
 
-  // Strip first-step injected reminders (skill catalog, AGENTS.md digest)
-  // during bootstrap. First-registered + `prepend` keeps this strip the
-  // final waterfall transform, so it actually removes what later listeners
-  // inject (issue #6).
+  // Opt-in Pro long-task discipline hint (default OFF). First-request context
+  // suppression is owned by the companion `context-gate` row; this listener
+  // only appends the optional discipline hint after promotion.
   const disciplineHinted = new Set() // `${sessionId}:${epochBoundary}` keys
   ctx.on('agent/pre-step', async ({ agent }, next) => {
-    // Downstream errors propagate untouched; only this filter's own logic is guarded.
+    // Downstream errors propagate untouched; only this listener's own logic is guarded.
     const decision = await next()
     if (decision.kind === 'reject') return decision
     try {
       const status = promotion.status(agent)
-      if (status.promoted) {
-        // Opt-in Pro long-task discipline hint: once PER EPOCH, only after
-        // promotion (the anchor window is long closed), Pro path only.
-        // Per-epoch because a compaction folds the earlier hint into the
-        // summary — the post-compaction epoch would otherwise run without it.
-        if (!proDisciplineHint) return decision
-        const path = forcePath !== 'auto' ? forcePath : (isFlashModel(agent?.options?.model) ? 'flash' : 'pro')
-        if (path !== 'pro') return decision
-        const sid = agent?.session?.id
-        const epochKey = `${sid}:${status.boundary}`
-        if (sid === undefined || disciplineHinted.has(epochKey) || !Array.isArray(decision.messages)) return decision
-        disciplineHinted.add(epochKey)
-        return {
-          ...decision,
-          messages: [...decision.messages, {
-            id: `miraculous-discipline-hint-${sid}-${status.boundary}`,
-            role: 'user',
-            content: [{ type: 'text', text: proDisciplineHintText }],
-            source: { kind: 'miraculous-discipline-hint', form: 'hint' },
-          }],
-        }
+      if (!status.promoted) return decision
+      // Opt-in Pro long-task discipline hint: once PER EPOCH, only after
+      // promotion (the anchor window is long closed), Pro path only.
+      // Per-epoch because a compaction folds the earlier hint into the
+      // summary — the post-compaction epoch would otherwise run without it.
+      if (!proDisciplineHint) return decision
+      const path = forcePath !== 'auto' ? forcePath : (isFlashModel(agent?.options?.model) ? 'flash' : 'pro')
+      if (path !== 'pro') return decision
+      const sid = agent?.session?.id
+      const epochKey = `${sid}:${status.boundary}`
+      if (sid === undefined || disciplineHinted.has(epochKey) || !Array.isArray(decision.messages)) return decision
+      disciplineHinted.add(epochKey)
+      return {
+        ...decision,
+        messages: [...decision.messages, {
+          id: `miraculous-discipline-hint-${sid}-${status.boundary}`,
+          role: 'user',
+          content: [{ type: 'text', text: proDisciplineHintText }],
+          source: { kind: 'miraculous-discipline-hint', form: 'hint' },
+        }],
       }
-      if (suppressedSources.size === 0) return decision
-      if (!Array.isArray(decision.messages)) return decision
-      const kept = decision.messages.filter((message) => {
-        const kind = message?.source?.kind
-        return typeof kind !== 'string' || !suppressedSources.has(kind)
-      })
-      return kept.length === decision.messages.length ? decision : { ...decision, messages: kept }
     } catch (error) {
-      // A filter bug must never eat context: degrade to keeping every message.
-      warnOnce(`${name}: pre-step context filter failed, keeping injected context: ${String((error && error.message) || error)}`)
+      // A hint bug must never hurt the session: skip the hint.
+      warnOnce(`${name}: discipline hint failed, skipping: ${String((error && error.message) || error)}`)
+      return decision
+    }
+  }, { prepend: true })
+
+  /**
+   * First-request anchor + tool-phase reminder. Applies to EVERY session
+   * (main and child): the persona no longer mentions AGENTS.md, so without a
+   * concrete first action Flash tends to open with "The user..." / "Let me..."
+   * and to refuse a delegation request because the bootstrap pair lacks
+   * subagent/dev_tool_search. This ONE user-role reminder is appended to the
+   * first pre-promotion request; the companion context-gate row keeps the
+   * `miraculous-first-turn-hint` kind through its default-deny.
+   */
+  const firstTurnHinted = new Set() // `${sessionId}:${epochBoundary}` keys
+  const firstTurnHintIdPrefix = (session, boundary) => `miraculous-first-turn-hint-${session.id}-${boundary}-`
+  const firstTurnHintIsDurable = (session, boundary) => {
+    const prefix = firstTurnHintIdPrefix(session, boundary)
+    return sessionEvents(session).some((event) => {
+      if (event.type !== 'user/message') return false
+      const data = event.data
+      if (data?.source?.kind !== 'miraculous-first-turn-hint') return false
+      return typeof data?.id === 'string' && data.id.startsWith(prefix)
+    })
+  }
+  ctx.on('agent/pre-step', async ({ agent }, next) => {
+    const decision = await next()
+    if (decision.kind === 'reject') return decision
+    try {
+      if (!firstTurnHint) return decision
+      const session = agent?.session
+      if (session === undefined) return decision
+      const status = promotion.status(agent)
+      if (status.promoted) return decision
+      const epochKey = `${session.id}:${status.boundary}`
+      if (firstTurnHinted.has(epochKey) || firstTurnHintIsDurable(session, status.boundary)) return decision
+      if (!Array.isArray(decision.messages)) return decision
+      firstTurnHinted.add(epochKey)
+      return {
+        ...decision,
+        messages: [...decision.messages, {
+          id: `${firstTurnHintIdPrefix(session, status.boundary)}${randomUUID()}`,
+          role: 'user',
+          content: [{ type: 'text', text: firstTurnHintText }],
+          source: { kind: 'miraculous-first-turn-hint', form: 'hint' },
+        }],
+      }
+    } catch (error) {
+      // A hint bug must never hurt the session: skip the hint.
+      warnOnce(`${name}: first-turn hint failed, skipping: ${String((error && error.message) || error)}`)
       return decision
     }
   }, { prepend: true })

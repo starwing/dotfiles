@@ -109,7 +109,7 @@ const commandSchema = {
     },
     workdir: {
       type: 'string',
-      description: 'Optional working directory; defaults to the session cwd. On Windows, Git Bash paths like /e/foo are accepted and converted to E:\foo.',
+      description: 'Optional working directory; defaults to the session cwd. On Windows, Git Bash paths like /e/foo are accepted and converted to E:\\foo.',
     },
   },
   required: ['command'],
@@ -245,10 +245,10 @@ export function apply(ctx, config) {
       } catch {
         // Collected readers may be unavailable on some backends; tolerate.
       }
-        const note = usedFallback
-          ? `[custom-bash] workdir ${requested} was unusable (ENOENT); fell back to session cwd\n`
-          : ''
-        const text = [stdout, stderr].filter((part) => part.length > 0).join('\n')
+      const note = usedFallback
+        ? `[custom-bash] workdir ${requested} was unusable (ENOENT); fell back to session cwd\n`
+        : ''
+      const text = [stdout, stderr].filter((part) => part.length > 0).join('\n')
       const tail = note + (text.length > 0 ? text : `exit code: ${outcome.exitCode} (no output)`)
       if (outcome.exitCode !== 0) {
         // Non-zero exit is a reported failure, not a throw: the model sees the

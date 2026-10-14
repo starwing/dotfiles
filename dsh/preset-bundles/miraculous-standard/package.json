@@ -1,0 +1,12 @@
+{
+  "name": "@local/dsh-miraculous-standard-preset",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Declares the miraculous-standard agent preset (migrated from the legacy $DSH_HOME/.agent-presets directory).",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

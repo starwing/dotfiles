@@ -1,0 +1,28 @@
+{
+  "petId": "whale-girl",
+  "names": {},
+  "skins": {},
+  "affinity": {
+    "points": 8,
+    "lastPetAt": 1790378423045,
+    "lastFeedAt": 0,
+    "pets": 2,
+    "feeds": 0,
+    "petRejects": 3,
+    "feedRejects": 0,
+    "turns": 6
+  },
+  "treats": {
+    "treats": 0,
+    "lastTreatGrantAt": 1790377356396,
+    "turnsAtLastTreatGrant": 0
+  },
+  "display": {
+    "visible": true,
+    "size": 160,
+    "right": 0,
+    "bottom": 0,
+    "bubbleScale": 1
+  },
+  "gameplay": {}
+}

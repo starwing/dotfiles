@@ -32,6 +32,33 @@
  * sessions.
  */
 
+/**
+ * Durable events of one session across harness API generations. Through dsh
+ * 0.1.2 the Session exposed an `events` property; 0.1.5-rc.1 replaced it with
+ * `snapshotEvents()` (same full, fork-included log; O(1) after the first call)
+ * and `ownEvents()` (child-owned suffix only — so it is NOT equivalent).
+ * @param session - agent session, or undefined outside an agent.
+ * @returns the session's durable events in log order.
+ */
+export function sessionEvents(session) {
+  if (Array.isArray(session?.events)) return session.events
+  if (typeof session?.snapshotEvents === 'function') return session.snapshotEvents()
+  if (typeof session?.ownEvents === 'function') return session.ownEvents()
+  return []
+}
+
+/**
+ * Durable event count without materializing the log — `Session.seq` is the log
+ * length by contract, which keeps the staleness check O(1) per assembly.
+ * @param session - agent session, or undefined outside an agent.
+ * @returns the number of durable events.
+ */
+export function sessionEventCount(session) {
+  if (Array.isArray(session?.events)) return session.events.length
+  if (typeof session?.seq === 'number') return session.seq
+  return sessionEvents(session).length
+}
+
 /** Build one epoch-aware promotion tracker. */
 export function createEpochPromotion(promoteEvents, options = {}) {
   const includeSubagents = options.includeSubagents === true
@@ -43,7 +70,7 @@ export function createEpochPromotion(promoteEvents, options = {}) {
   const scan = (session) => {
     let boundary = -1
     let promoted = false
-    for (const event of session.events) {
+    for (const event of sessionEvents(session)) {
       const seq = event.seq ?? 0 // events without a seq are treated as post-boundary
       if (event.type === 'compaction/end') {
         boundary = seq
@@ -52,7 +79,7 @@ export function createEpochPromotion(promoteEvents, options = {}) {
       }
       if (promote.has(event.type) && seq > boundary) promoted = true
     }
-    const entry = { boundary, promoted, scanned: session.events.length }
+    const entry = { boundary, promoted, scanned: sessionEventCount(session) }
     state.set(session.id, entry)
     return entry
   }
@@ -77,7 +104,7 @@ export function createEpochPromotion(promoteEvents, options = {}) {
       // taken — whether or not the session has promoted. Without the live
       // feed, a post-promotion compaction/end would otherwise stay invisible
       // forever, and the session would never re-anchor.
-      if (entry !== undefined && session.events.length === entry.scanned) return entry
+      if (entry !== undefined && sessionEventCount(session) === entry.scanned) return entry
       return scan(session)
     },
     /** Incremental feed: call on every `session/event` (when the feed exists). */

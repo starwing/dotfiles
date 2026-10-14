@@ -2,38 +2,178 @@
 # a top-level YAML array of loader patch entries (id-targeted config
 # overrides, disables, and insert lists; `!!js` expressions allowed).
 # []
-- id: compaction-basic
-  disabled: true
 - id: compaction-acp
   name: 'billion-context-dsh'
   config:
-    modelContextLimit: 256000   # 可选；省略时自动探测模型真实窗口（回退 128000）
+    modelContextLimit: 512000 # 可选；省略时自动探测模型真实窗口（回退 128000）
     prompts:
       nudge:
         normal: |
-          上下文使用率 {pct}%。这是效率提示——请尽早压缩保持上下文精简。
-          如果在任务中需要上下文信息，可以先不压缩，任务完成后再压缩。
-          不要过度删减，保证当前工作上下文完整，避免删减后重读。
-- id: terminal-bash
-  # Fix persistent-bash hangs on macOS. A patch replaces the whole config,
-  # so shellPath/timeoutMs must be restated here.
-  config:
-    shellPath: !!js "process.getBuiltinModule?.('node:fs')?.existsSync('/bin/bash') ? '/bin/bash' : 'bash'"
-    timeoutMs: 300000
-    shellArgs:
-      - --noprofile
-      - --rcfile
-      # Bash expands the leading `~`, so this stays portable across
-      # machines/users without hard-coding an absolute path.
-      - ~/.dsh/bashrc.dsh
-      # Do NOT add --noediting here: it disables readline and leaves the pty
-      # in canonical mode, which deadlocks on macOS when a single write to the
-      # pty exceeds the ~512B canonical line buffer (large heredocs / long
-      # single-quoted commands hang until the 300s timeout).
-      - -i
-- id: dsh-notifier
-  name: dsh-notifier
-  config:
-    admin.enabled: true
+          上下文使用率 {pct}%。这是效率提示——请尽早压缩保持上下文精简
+          如果在任务中需要上下文信息，可以先不压缩，任务完成后再压缩
+          不要过度删减，保证当前工作上下文完整，尽量避免删减后重读
+          一定要精确压缩！绝不允许压缩用户信息！必须且只允许压缩tool_call节点
+          压缩后必须立即读 AGENTS.md 文件
+#- id: terminal-bash
+#  # Fix persistent-bash hangs on macOS. A patch replaces the whole config,
+#  # so shellPath/timeoutMs must be restated here.
+#  config:
+#    shellPath: !!js "process.getBuiltinModule?.('node:fs')?.existsSync('/bin/bash')
+#      ? '/bin/bash' : 'bash'"
+#    timeoutMs: 300000
+#    shellArgs:
+#      - --noprofile
+#      - --rcfile
+#      # Bash expands the leading `~`, so this stays portable across
+#      # machines/users without hard-coding an absolute path.
+#      - ~/.dsh/bashrc.dsh
+#      # Do NOT add --noediting here: it disables readline and leaves the pty
+#      # in canonical mode, which deadlocks on macOS when a single write to the
+#      # pty exceeds the ~512B canonical line buffer (large heredocs / long
+#      # single-quoted commands hang until the 300s timeout).
+#      - -i
 - id: dsh-better-edit
   disabled: true
+- id: compaction-acp
+  disabled: true
+- id: ui-settings-general
+  name: "@deepseek-ai/dsh-client-ui-settings-general"
+  config:
+    welcomeNoticeVersion: 2026-09-28.1
+- id: ui-conversation
+  name: "@deepseek-ai/dsh-client-ui-conversation"
+  config:
+    busyEnter: steer
+- id: ui-theme
+  name: "@deepseek-ai/dsh-client-ui-theme"
+  config:
+    preference: system
+    fontSize: 15
+- id: llm-deepseek
+  name: "@deepseek-ai/dsh-llm-deepseek-api-key"
+  config:
+    models:
+      - id: deepseek-flash
+        name: DeepSeek-V4-Flash
+        inputModalities:
+          - text
+          - image
+        contextWindow: 500000
+        maxTokens: 65536
+      - id: deepseek-pro
+        name: DeepSeek-V4-Pro
+        contextWindow: 1000000
+        inputModalities:
+          - text
+- id: agent-default-model
+  name: "@deepseek-ai/dsh-agent-default-model"
+  config:
+    provider: deepseek-official
+    model: deepseek-flash
+    reasoningEffort: high
+- id: agent-preset-registry
+  name: "@deepseek-ai/dsh-agent-preset-registry"
+  config:
+    default: standard
+    selectedDefault: miraculous-standard
+- id: better-sidebar
+  name: dsh-better-sidebar
+  config:
+    tasksViewMode: tree
+    tabsEnabled:
+      diff: true
+- id: preset-miraculous-standard
+  disabled: false
+- id: miraculous-standard
+  disabled: false
+- id: context-gate
+  disabled: false
+- id: miraculous-bootstrap
+  disabled: false
+- id: persona
+  disabled: false
+- id: instruction-hint
+  disabled: false
+- id: dev-tool-search
+  disabled: false
+- id: tool-bash
+  disabled: false
+- id: tool-pwsh
+  disabled: false
+- id: persistent-shell
+  disabled: false
+- id: pty
+  disabled: false
+- id: terminal-bash
+  disabled: false
+- id: persistent-bash
+  disabled: false
+- id: custom-bash
+  disabled: false
+- id: tool-fs
+  disabled: false
+- id: tool-fs-search
+  disabled: false
+- id: bootstrap-filesystem
+  disabled: false
+- id: fs-local
+  disabled: false
+- id: str-replace-editor
+  disabled: false
+- id: tool-jobs
+  disabled: false
+- id: skill-filesystem
+  disabled: false
+- id: skill-search
+  disabled: false
+- id: tool-goal
+  disabled: false
+- id: planning
+  disabled: false
+- id: plan-mode
+  disabled: false
+- id: compaction
+  disabled: false
+- id: command-compact
+  disabled: false
+- id: tool-result-pruner
+  disabled: false
+- id: delegation
+  disabled: false
+- id: tool-subagent-control
+  disabled: false
+- id: tool-subagent-list-agents
+  disabled: false
+- id: tool-subagent
+  disabled: false
+- id: tool-subagent-fork
+  disabled: false
+- id: tool-subagent-codex
+  disabled: false
+- id: tool-subagent-claude-code
+  disabled: false
+- id: workflow-engine
+  disabled: false
+- id: tool-workflow
+  disabled: false
+- id: tool-ralph
+  disabled: false
+- id: tool-ask-user
+  disabled: false
+- id: tool-todo
+  disabled: false
+- id: tool-web
+  disabled: false
+- id: bili-native
+  disabled: true
+- id: subagent-model-selection-settings
+  name: "@deepseek-ai/dsh-tool-subagent/model-selection-settings"
+  config:
+    enabled: true
+    allowedModels:
+      - provider: deepseek-official
+        model: deepseek-flash
+- id: dsh-context
+  name: dsh-context
+  config:
+    defaultFileSort: path
