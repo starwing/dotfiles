@@ -100,4 +100,3 @@ export LUA_CPATH_5_5="$LUA_CPATH_5_5$LUA_CPATH_5_5_old"
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 
-export PATH="$PATH:/Users/sw/.local/bin"

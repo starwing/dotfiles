@@ -1,3 +1,4 @@
 /uninstall.sh
 tmux/resurrect
 neovim/nvim.log
+claude
